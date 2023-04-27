@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  appointment-service:
+    build: ./microservice
+    container_name: appointmentService
+    environment:
+      - APP_PORT=50000
+      - APP_NAME=appointmentService
+    ports:
+      - "50000:50000"
+    networks:
+    - project-network
+      
+
+networks:
+  project-network:
+    name: project-network
