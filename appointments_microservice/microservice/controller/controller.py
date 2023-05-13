@@ -44,4 +44,4 @@ class ControlerLayer():
 
 if __name__ == '__main__':
     controller = ControlerLayer()
-    uvicorn.run(controller.app, host='0.0.0.0', port=50000)
+    uvicorn.run(controller.app, host='0.0.0.0', port=8080)

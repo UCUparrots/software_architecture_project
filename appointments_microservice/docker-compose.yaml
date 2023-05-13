@@ -5,10 +5,10 @@ services:
     build: ./microservice
     container_name: appointmentService
     environment:
-      - APP_PORT=50000
+      - APP_PORT=8080
       - APP_NAME=appointmentService
     ports:
-      - "50000:50000"
+      - "8080:8080"
     networks:
     - project-network
       

@@ -1,4 +1,4 @@
-from appointment import Appointment, Message
+from domain_objects import Appointment, Message
 
 class DomainLayer:
 
