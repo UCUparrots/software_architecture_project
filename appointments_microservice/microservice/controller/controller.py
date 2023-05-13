@@ -2,6 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 import sys
 import os
+import time
 sys.path.append('./opt/app/domain')
 sys.path.append('./opt/app/service')
 
@@ -43,5 +44,6 @@ class ControlerLayer():
 
 
 if __name__ == '__main__':
+    time.sleep(30)
     controller = ControlerLayer()
     uvicorn.run(controller.app, host='0.0.0.0', port=8080)

@@ -11,7 +11,25 @@ services:
       - "8080:8080"
     networks:
     - project-network
-      
+
+  postgres-1:
+    image: postgres:13-alpine
+    container_name: postgres-1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test_db
+    # user: postgres
+    # healthcheck:
+    #   test: [ "CMD-SHELL", "pg_isready" ]
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 5
+    ports:
+      - "5432:5432"
+    networks:
+      - project-network
+    
 
 networks:
   project-network:
