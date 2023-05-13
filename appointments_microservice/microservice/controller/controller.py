@@ -17,16 +17,16 @@ class ControlerLayer():
         self.app = FastAPI()
         self.service = ServiceLayer()
     
-        @self.app.post('/get_appointments')
+        @self.app.get('/get_appointments')
         def get_appointments(args: dict):
-            message = DomainLayer.create_message(args)
-            appointments = self.service.get_appointments(message)
-            return appointments.to_json()
+            optmessage = DomainLayer.create_opt_message(args)
+            appointments = self.service.get_appointments(optmessage)
+            return appointments
 
         @self.app.post('/new_appointment')
-        def new_appointment(args: Message):
-            message = DomainLayer.create_message(args)
-            status = self.service.create_appointment(message)
+        def new_appointment(args: dict):
+            appointment = DomainLayer.create_appointment(args)
+            status = self.service.create_appointment(appointment)
             return status
         
         @self.app.post('/delete_appointment')

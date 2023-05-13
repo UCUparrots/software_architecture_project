@@ -1,6 +1,6 @@
 import sys
 sys.path.append('./opt/app/domain')
-from domain_objects import Appointment, Message, Reason
+from domain_objects import Appointment, Message, Reason, OptMessage
 from uuid import UUID
 
 
@@ -8,37 +8,37 @@ class RepositoryLayer:
     def __init__(self):
         self.rdbms_ip = ''
 
-    def save_appointment(appointment: Appointment):
+    def save_appointment(self, appointment: Appointment):
         # save appointment to rdbms
         status = True
         return status
     
-    def get_past_appointments(message: Message):
+    def get_past_appointments(self, optmessage: OptMessage):
         # retrieve appointments from rdbms
-        status = True
-        return status
+        result = []
+        return result
     
-    def get_future_appointments(message: Message):
+    def get_future_appointments(self, optmessage: OptMessage):
         # retrieve appointments from rdbms
-        status = True
-        return status
+        result = []
+        return result
     
-    def check_if_future(appointment_id: UUID):
+    def check_if_future(self, appointment_id: UUID):
         # check
         check=True
         return check
     
-    def delete_future_appointment(appointment_id: UUID):
+    def delete_future_appointment(self, appointment_id: UUID):
         # delete from rdbms
         status = True
         return status
     
-    def delete_past_appointment(appointment_id: UUID):
+    def delete_past_appointment(self, appointment_id: UUID):
         # delete from rdbms
         status = True
         return status
     
-    def confirm_appointment(appointment_id: UUID):
+    def confirm_appointment(self, appointment_id: UUID):
         # move appointment from future to past
         status = True
         return status

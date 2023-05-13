@@ -1,7 +1,8 @@
 import sys
+import json
 sys.path.append('./opt/app/domain')
 sys.path.append('./opt/app/repository')
-from domain_objects import Appointment, Message, Reason
+from domain_objects import Appointment, Message, Reason, OptMessage
 from uuid import UUID, uuid4
 from repository import RepositoryLayer
 
@@ -12,15 +13,16 @@ class ServiceLayer:
     def __init__(self):
         self.repository = RepositoryLayer()
 
-    def get_appointments(self, message):
-        past = self.repository.get_past_appointments(message)
-        future = self.repository.get_future_appointsments(message)
-
-        result = past.extend(future)
-        return result
+    def get_appointments(self, optmessage: OptMessage):
+        past = self.repository.get_past_appointments(optmessage)
+        future = self.repository.get_future_appointments(optmessage)
+        # print(past)
+        # print(future)
+        past.extend(future)
+        
+        return json.dumps(past)
     
-    def create_appointment(self, message: Message):
-        appointment = Appointment(id=uuid4(), doctor=message.doctor, patient=message.patient, type=message.type, date=message.date)
+    def create_appointment(self, appointment: Appointment):
         return self.repository.save_appointment(appointment)
     
     def delete_appointment(self, appointment_id: UUID):
@@ -30,4 +32,4 @@ class ServiceLayer:
         return self.repository.delete_past_appointment(appointment_id)
     
     def confirm_appointment(self, appointment_id: UUID):
-        return self.repository.confirm_appointmnet(appointment_id)
+        return self.repository.confirm_appointment(appointment_id)

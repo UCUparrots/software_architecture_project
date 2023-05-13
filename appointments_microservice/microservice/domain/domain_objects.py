@@ -3,6 +3,7 @@ from reason import Reason
 from uuid import UUID
 import pandas as pd
 from enum import Enum
+from typing import Optional
 
 class Reason(Enum):
     CONSULTATION = 1
@@ -23,3 +24,10 @@ class Message(BaseModel):
     patient: UUID
     date: pd.Timestamp
     type: Reason
+
+class OptMessage(BaseModel):
+    doctor: Optional[UUID] = None
+    patient: Optional[UUID] = None
+    date: Optional[pd.Timestamp] = None
+    type: Optional[Reason] = None
+    id: Optional[UUID] = None
