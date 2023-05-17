@@ -13,7 +13,7 @@ services:
     - project-network
 
   postgres-1:
-    image: postgres:13-alpine
+    build: ./database
     container_name: postgres-1
     environment:
       POSTGRES_USER: postgres
