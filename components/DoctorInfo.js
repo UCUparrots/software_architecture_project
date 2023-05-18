@@ -23,11 +23,6 @@ function DoctorInfo({
 	const [specializationVal, setSpecializationVal] = useState(specialization);
 	const [phoneVal, setPhoneVal] = useState(phone);
 
-	const inputStyle = {
-		color: '#8E8F94',
-		borderRadius: '10px',
-	};
-
 	return (
 		<div
 			className='p-3 bg-[#fff] rounded-3xl drop-shadow-lg w-[65vw] h-[45vh]
@@ -84,7 +79,6 @@ function DoctorInfo({
 												id='outlined-basic'
 												size='small'
 												value={specializationVal}
-												style={inputStyle}
 												onChange={(e) => setSpecializationVal(e.target.value)}
 												variant='outlined'
 											/>
@@ -208,7 +202,7 @@ function DoctorInfo({
 						<div className='text-[22px] text-primary pr-[5px]'>
 							<RiFolderUserLine />
 						</div>
-						<Link href='/UserInfoPage'>
+						<Link href='/User/UserListPage'>
 							<div className='text-primary'>CURRENT PATIENTS</div>
 						</Link>
 					</div>

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { VscLink } from 'react-icons/vsc';
 import { BiUser, BiMenu, BiLogOutCircle } from 'react-icons/bi';
-import { BsFillPersonVcardFill } from 'react-icons/bs';
+import { BsFillPersonVcardFill, BsCalendarCheck } from 'react-icons/bs';
 import { AiFillSchedule } from 'react-icons/ai';
 import { FaUsers } from 'react-icons/fa';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ import { MyContext } from '@/AppStateProvider';
 import { useState } from 'react';
 
 function Sidebar() {
-	const { isActive, setIsActive } = useContext(MyContext);
+	const { isActive, setIsActive, isDoctor } = useContext(MyContext);
 
 	const handleToggle = () => {
 		setIsActive((isActive) => {
@@ -59,63 +59,93 @@ function Sidebar() {
 					<span
 						className={`tooltip
 						group-hover:transition-all group-hover:duration-500 group-hover:ease-in-out
-						group-hover:opacity-100 group-hover:top-[50%]
+						group-hover:opacity-100 group-hover:top-[50%] z-20
 						${isActive ? 'hidden' : 'block'}`}
 					>
 						Profile
 					</span>
 				</li>
 
-				<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
-					<Link className='sidebar-link' href='/'>
-						<AiFillSchedule className='icon' />
-						<span
-							className={`transition-all duration-500 ease-in-out
+				{isDoctor ? (
+					<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
+						<Link className='sidebar-link' href='DoctorSchedulePage'>
+							<AiFillSchedule className='icon' />
+							<span
+								className={`transition-all duration-500 ease-in-out
 						${
 							isActive
 								? 'opacity-1 pointer-events-auto'
 								: 'opacity-0 pointer-events-none'
 						}`}
+							>
+								Schedule
+							</span>
+						</Link>
+						<span
+							className={`tooltip
+						group-hover:transition-all group-hover:duration-500 group-hover:ease-in-out
+						group-hover:opacity-100 group-hover:top-[50%] z-20
+						${isActive ? 'hidden' : 'block'}`}
 						>
 							Schedule
 						</span>
-					</Link>
-					<span
-						className={`tooltip
-						group-hover:transition-all group-hover:duration-500 group-hover:ease-in-out
-						group-hover:opacity-100 group-hover:top-[50%]
-						${isActive ? 'hidden' : 'block'}`}
-					>
-						Schedule
-					</span>
-				</li>
-
-				<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
-					<a className='sidebar-link' href='#'>
-						<BsFillPersonVcardFill className='icon' />
-						<span
-							className={`transition-all duration-500 ease-in-out
+					</li>
+				) : (
+					<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
+						<Link className='sidebar-link' href='/AppointmentPage'>
+							<BsCalendarCheck className='icon' />
+							<span
+								className={`transition-all duration-500 ease-in-out
 						${
 							isActive
 								? 'opacity-1 pointer-events-auto'
 								: 'opacity-0 pointer-events-none'
 						}`}
+							>
+								Appointment
+							</span>
+						</Link>
+						<span
+							className={`tooltip
+						group-hover:transition-all group-hover:duration-500 group-hover:ease-in-out
+						group-hover:opacity-100 group-hover:top-[50%] z-20
+						${isActive ? 'hidden' : 'block'}`}
+						>
+							Appointment
+						</span>
+					</li>
+				)}
+
+				{isDoctor ? (
+					<></>
+				) : (
+					<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
+						<Link className='sidebar-link' href='/HealthCardPage'>
+							<BsFillPersonVcardFill className='icon' />
+							<span
+								className={`transition-all duration-500 ease-in-out
+						${
+							isActive
+								? 'opacity-1 pointer-events-auto'
+								: 'opacity-0 pointer-events-none'
+						}`}
+							>
+								Health card
+							</span>
+						</Link>
+						<span
+							className={`tooltip
+						group-hover:transition-all group-hover:duration-500 group-hover:ease-in-out
+						group-hover:opacity-100 group-hover:top-[50%] z-20
+						${isActive ? 'hidden' : 'block'}`}
 						>
 							Health card
 						</span>
-					</a>
-					<span
-						className={`tooltip
-						group-hover:transition-all group-hover:duration-500 group-hover:ease-in-out
-						group-hover:opacity-100 group-hover:top-[50%]
-						${isActive ? 'hidden' : 'block'}`}
-					>
-						Health card
-					</span>
-				</li>
+					</li>
+				)}
 
 				<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
-					<a className='sidebar-link' href='#'>
+					<Link className='sidebar-link' href='/User/UserListPage'>
 						<FaUsers className='icon' />
 						<span
 							className={`transition-all duration-500 ease-in-out
@@ -127,11 +157,11 @@ function Sidebar() {
 						>
 							Patients
 						</span>
-					</a>
+					</Link>
 					<span
 						className={`tooltip
 						group-hover:transition-all group-hover:duration-500 group-hover:ease-in-out
-						group-hover:opacity-100 group-hover:top-[50%]
+						group-hover:opacity-100 group-hover:top-[50%] z-20
 						${isActive ? 'hidden' : 'block'}`}
 					>
 						Patients

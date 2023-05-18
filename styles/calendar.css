@@ -1,0 +1,17 @@
+/* Change the background color of the calendar */
+.fc {
+	width: 50vw;
+	height: 70vh;
+	border-radius: 30px;
+}
+
+/* Change the font color of the calendar header */
+.fc-header-toolbar {
+	color: #333;
+}
+
+/* Change the background color of the event */
+.fc-event {
+	background-color: #007bff;
+	color: #fff;
+}

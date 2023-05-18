@@ -1,8 +1,10 @@
-import React from 'react';
 import DoctorInfo from '@/components/DoctorInfo';
 import Layout from '@/components/Layout';
 
 function DoctorInfoPage() {
+	let date = new Date();
+	date = date.toLocaleDateString('en-US');
+
 	return (
 		<Layout>
 			<div>
@@ -15,7 +17,7 @@ function DoctorInfoPage() {
 					about='Love flowers and money. Some more information to fill in the blank space and mark down that today is a sunny day. All the best.'
 					specialization='Dantist: second class'
 					phone='(380) 94 254 44 13'
-					date='12/03/1983'
+					date={date}
 					email='stevenHole@leekar.com'
 					rate={4}
 				/>

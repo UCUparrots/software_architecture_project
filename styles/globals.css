@@ -62,3 +62,9 @@
 		transition: all 0.4s ease;
 	}
 }
+.react-calendar__tile--range {
+	background-color: #4a148c !important;
+}
+.react-calendar__tile--active {
+	background-color: #4a148c !important;
+}

@@ -4,8 +4,9 @@ import { RiFolderUserLine } from 'react-icons/ri';
 import { MdEdit } from 'react-icons/md';
 import Image from 'next/image';
 import { MyContext } from '@/AppStateProvider';
+import Link from 'next/link';
 
-function UserInfo({ name, residence, phone, date, email }) {
+function UserInfo({ id, name, residence, phone, date, email }) {
 	const { isDoctor } = useContext(MyContext);
 	const [showForm, setShowForm] = useState(false);
 
@@ -37,7 +38,7 @@ function UserInfo({ name, residence, phone, date, email }) {
 						{name}
 					</div>
 					<div>
-						{showForm ? (
+						{showForm || isDoctor ? (
 							<></>
 						) : (
 							<button
@@ -164,12 +165,18 @@ function UserInfo({ name, residence, phone, date, email }) {
 				{showForm ? (
 					<> </>
 				) : (
-					<div className='flex flex-row justify-end mr-8'>
+					<Link
+						className='flex flex-row justify-end mr-8'
+						href={{
+							pathname: '/HealthCardPage',
+							query: { id: id }, // the data
+						}}
+					>
 						<div className='text-[22px] text-primary pr-[5px]'>
 							<RiFolderUserLine />
 						</div>
-						<div className='text-primary'>{isDoctor ? 'CARD' : 'My Card'}</div>
-					</div>
+						<div className='text-primary'>{isDoctor ? 'CARD' : 'MY CARD'}</div>
+					</Link>
 				)}
 			</div>
 		</div>
