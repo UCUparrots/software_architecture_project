@@ -23,6 +23,18 @@ class ControlerLayer():
             optmessage = DomainLayer.create_opt_message(args)
             appointments = self.service.get_appointments(optmessage)
             return appointments
+        
+        @self.app.get('/get_future_appointments')
+        def get_appointments(args: dict):
+            optmessage = DomainLayer.create_opt_message(args)
+            appointments = self.service.get_future_appointments(optmessage)
+            return appointments
+        
+        @self.app.get('/get_past_appointments')
+        def get_appointments(args: dict):
+            optmessage = DomainLayer.create_opt_message(args)
+            appointments = self.service.get_past_appointments(optmessage)
+            return appointments
 
         @self.app.post('/new_appointment')
         def new_appointment(args: dict):
