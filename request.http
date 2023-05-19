@@ -1,0 +1,13 @@
+GET http://localhost:8000/medcard_service?uuid=uniqueid
+###
+
+POST http://localhost:8000/medcard_service
+Content-Type: application/json
+
+{
+  "patient_id": "hi",
+  "doctor_id": "str",
+  "appointment_id": "str",
+  "diagnosis": "str"
+}
+###
