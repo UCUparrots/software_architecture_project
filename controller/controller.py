@@ -9,11 +9,10 @@ from domain.AppointmentNotes import AppointmentNotes
 
 
 
-
 class CardController:
     def __init__(self, app: FastAPI):
         @app.get("/medcard_service")
-        async def get_patient_information(uuid: int):
+        async def get_patient_information(uuid: str):
             return CardService().form_medcard(uuid)
 
         @app.post("/medcard_service")

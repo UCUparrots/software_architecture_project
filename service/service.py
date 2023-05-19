@@ -16,15 +16,23 @@ class CardService:
         user = get_patient_info(patient_uuid)
         apps = self.form_appointment_info(get_patient_appointments(patient_uuid))
 
-        return MedCardInfo(user.name, user.email, user.phone, user.birthdate, apps)
+        return vars(MedCardInfo(user['name'], user['email'],
+                                user['phone'], user['birthdate'], apps))
 
     @staticmethod
     def form_appointment_info(apps) -> list:
         appointments = []
         for app in apps:
-            doctor = get_doctor_info(app.doctor_id)
-            appointments.append({'doctor_type': doctor.type, 'doctor_name': doctor.name,
-                                 'appointment_type': app.type, 'diagnosis': app.diagnosis, 'notes': app.notes})
+            doctor = get_doctor_info(app['doctor_id'])
+            appointments.append({'doctor_type': doctor['doctor_specialization'],
+                                 'doctor_name': doctor['name'],
+                                 # 'appointment_type': app['type'],
+                                 'diagnosis': app['diagnosis'],
+                                 'notes_from_doctor': app['notes_from_doctor'],
+                                 'is_relevant': app['is_relevant'],
+                                 'resolved_date': app['resolved_date'],
+                                 'start_date': app['start_date'],
+                                 'medicine': app['medicine']})
         return appointments
 
     @staticmethod
