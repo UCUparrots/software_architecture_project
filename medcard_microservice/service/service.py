@@ -1,8 +1,9 @@
 import sys
-sys.path.append('../domain')
+from os import path
+ROOT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
+sys.path.append(ROOT_DIR)
 from domain.AppointmentNotes import AppointmentNotes
 from domain.MedCardInfo import MedCardInfo
-sys.path.append('../repository')
 from repository.helpers import get_doctor_info, get_patient_info, get_patient_appointments, add_info, update_is_relevant
 
 

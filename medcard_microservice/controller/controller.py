@@ -1,10 +1,10 @@
 import uvicorn
 from fastapi import FastAPI
-import requests
 import sys
-sys.path.append('../service')
+from os import path
+ROOT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
+sys.path.append(ROOT_DIR)
 from service.service import CardService
-sys.path.append('../domain')
 from domain.AppointmentNotes import AppointmentNotes
 
 
@@ -28,4 +28,4 @@ def startup():
 
 
 if __name__ == '__main__':
-    uvicorn.run(startup(), host="localhost", port=8000)
+    uvicorn.run(startup(), host="0.0.0.0", port=8080)

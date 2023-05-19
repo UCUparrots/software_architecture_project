@@ -1,5 +1,7 @@
 import sys
-sys.path.append('../domain')
+from os import path
+ROOT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
+sys.path.append(ROOT_DIR)
 from domain.AppointmentNotes import AppointmentNotes
 
 #  Gets info from Patients' diagnosis history database
