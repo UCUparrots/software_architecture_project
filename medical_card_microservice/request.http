@@ -1,0 +1,13 @@
+GET http://0.0.0.0:8080/medcard_service?uuid=1d946fce-456d-4b27-9d15-23f173963a14
+###
+
+POST http://0.0.0.0:8080/medcard_service
+Content-Type: application/json
+
+{
+  "patient_id": "1d946fce-456d-4b27-9d15-23f173963a14",
+  "doctor_id": "d8e2d68e-20c1-4e0d-b52e-8209ab07b5c8",
+  "appointment_id": "3ec6a5fb-8a7f-4919-a6fe-b5379e431d28",
+  "diagnosis": "new diagnosis"
+}
+###
