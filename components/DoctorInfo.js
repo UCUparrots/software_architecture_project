@@ -30,7 +30,7 @@ function DoctorInfo({
 		>
 			<div className='flex flex-row'>
 				<Image
-					className='h-[15vh] w-[8vw] object-cover rounded-[20px]'
+					className='h-[160px] w-[160px] object-cover rounded-[20px]'
 					src='/profile.jpg'
 					width={160}
 					height={160}
@@ -197,14 +197,6 @@ function DoctorInfo({
 								emptyIcon={<FaRegStar fontSize='20px' />}
 							/>
 						</div>
-					</div>
-					<div className='flex flex-row items-center'>
-						<div className='text-[22px] text-primary pr-[5px]'>
-							<RiFolderUserLine />
-						</div>
-						<Link href='/User/UserListPage'>
-							<div className='text-primary'>CURRENT PATIENTS</div>
-						</Link>
 					</div>
 				</div>
 			)}

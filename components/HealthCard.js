@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { RiHealthBookLine, RiFolderUserLine } from 'react-icons/ri';
 import { BsBook } from 'react-icons/bs';
@@ -8,7 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import { MyContext } from '@/AppStateProvider';
 import { TextField } from '@mui/material';
 import { VscGroupByRefType } from 'react-icons/vsc';
-import DiagnosisHistory from './DiagnosisHistory';
+import DiagnosisHistory from './Diagnosis/DiagnosisHistory';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -23,6 +23,8 @@ function HealthCard({ data }) {
 	const [sDateVal, setSDateVal] = useState(data.startDate);
 	const [rDateVal, setRDateVal] = useState(data.resolvedDate);
 
+	const [diagnosises, setDiagnosises] = useState(null);
+
 	const { isDoctor, isAppointmentOpen, setIsAppointmentOpen } =
 		useContext(MyContext);
 
@@ -32,6 +34,61 @@ function HealthCard({ data }) {
 	const handleRDateChange = (date) => {
 		setRDateVal(date.toDate().toLocaleDateString('en-US'));
 	};
+
+	const handleAddDiagnosis = () => {
+		const newDiagnosis = {
+			id: diagnosises.length, // Generate a unique id based on the list length
+			diagnosis: diagnosisVal,
+			medicine: medicineVal,
+			startDate: sDateVal,
+			resolveDate: rDateVal,
+		};
+
+		setDiagnosises((prevDiagnosises) => [...prevDiagnosises, newDiagnosis]);
+	};
+
+	const handleSubmit = (e) => {
+		if (rDateVal != null) {
+			setDiagnosisVal('');
+			setMedicineVal('');
+			setNotesVal('');
+			setSDateVal(null);
+			setRDateVal(null);
+
+			handleAddDiagnosis();
+		}
+		setShowForm((prevCheck) => !prevCheck);
+	};
+
+	useEffect(() => {
+		setDiagnosises([
+			{
+				id: 0,
+				diagnosis: 'One',
+				medicine: 'm one',
+				startDate: '1/1/1992',
+				resolveDate: '1/1/1',
+			},
+			{
+				id: 1,
+				diagnosis: 'Two',
+				medicine: 'm two',
+				startDate: '2/2/2',
+				resolveDate: '2/2/2',
+			},
+			{
+				id: 2,
+				diagnosis: 'Three',
+				medicine: 'm three',
+				startDate: '3/3/3',
+				resolveDate: '3/3/3',
+			},
+		]);
+	}, []);
+
+	if (diagnosises === null) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div
@@ -67,7 +124,7 @@ function HealthCard({ data }) {
 			<div className='flex justify-between flex-grow mt-[4vh] ml-[2vw]'>
 				<div className='flex flex-col justify-between'>
 					{showForm ? (
-						<form>
+						<form onSubmit={handleSubmit}>
 							<ul>
 								<li className='mb-5'>
 									<div className='flex items-center'>
@@ -117,7 +174,6 @@ function HealthCard({ data }) {
 							</ul>
 							<button
 								type='submit'
-								onClick={() => setShowForm((prevCheck) => !prevCheck)}
 								className='bg-primary hover:bg-primary-dark text-white font-bold py-2 px-[20px] rounded-lg'
 							>
 								Submit
@@ -191,35 +247,39 @@ function HealthCard({ data }) {
 					)}
 					<div>
 						<div className='text-xl text-primary'>History of diagnoses</div>
-						<DiagnosisHistory />
+						<DiagnosisHistory data={diagnosises} />
 					</div>
 				</div>
 			</div>
-			<div className='flex justify-between'>
-				<div className='flex flex-row items-center'>
-					<div className='text-[22px] text-primary pr-[5px]'>
-						<RiFolderUserLine />
+			{isDoctor ? (
+				<div className='flex justify-between'>
+					<div className='flex flex-row items-center'>
+						<div className='text-[22px] text-primary pr-[5px]'>
+							<RiFolderUserLine />
+						</div>
+						<Link
+							href={{
+								pathname: '/UserInfoPage',
+								query: { id: data.id },
+							}}
+						>
+							<div className='text-primary text-sm'>CHECK PATIENT</div>
+						</Link>
 					</div>
-					<Link
-						href={{
-							pathname: '/UserInfoPage',
-							query: { id: data.id },
-						}}
-					>
-						<div className='text-primary text-sm'>CHECK PATIENT</div>
-					</Link>
-				</div>
-				<div className='flex flex-row items-center'>
-					<div className='text-[22px] text-primary pr-[5px]'>
-						<VscGroupByRefType />
+					<div className='flex flex-row items-center'>
+						<div className='text-[22px] text-primary pr-[5px]'>
+							<VscGroupByRefType />
+						</div>
+						<button
+							onClick={() => setIsAppointmentOpen((prevCheck) => !prevCheck)}
+						>
+							<div className='text-primary text-sm'>APPOINTSMENTS</div>
+						</button>
 					</div>
-					<button
-						onClick={() => setIsAppointmentOpen((prevCheck) => !prevCheck)}
-					>
-						<div className='text-primary text-sm'>APPOINTSMENTS</div>
-					</button>
 				</div>
-			</div>
+			) : (
+				<></>
+			)}
 		</div>
 	);
 }

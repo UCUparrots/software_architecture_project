@@ -23,13 +23,16 @@ function NewAppointment() {
 	];
 
 	function submitAppointment() {
-		const response = {
-			doctor: selectedDoctor.value,
-			service: selectedService.value,
-			date: pickedDate,
-		};
-		console.log(response);
-		setAppAdded(true);
+		if (selectedDoctor != null && selectedService != null) {
+			const response = {
+				doctor: selectedDoctor.value,
+				service: selectedService.value,
+				date: pickedDate,
+			};
+			setAppAdded(true);
+		} else {
+			alert('Input all fields');
+		}
 	}
 
 	return (
@@ -84,21 +87,33 @@ function NewAppointment() {
 								placeholder='Service'
 							/>
 						</div>
-						<div className='p-2 bg-primary rounded-lg'>
-							<Calendar
-								locale='en'
-								onChange={onPickedDate}
-								value={pickedDate}
-								tileDisabled={({ date, view }) =>
-									view === 'month' && // Block day tiles only
-									getTakenDates().some(
-										(disabledDate) =>
-											date.getFullYear() === disabledDate.getFullYear() &&
-											date.getMonth() === disabledDate.getMonth() &&
-											date.getDate() === disabledDate.getDate()
-									)
-								}
-								className={['calendar']}
+						<div>
+							<div className='p-2 bg-primary rounded-lg mb-5'>
+								<Calendar
+									locale='en'
+									onChange={onPickedDate}
+									value={pickedDate}
+									tileDisabled={({ date, view }) =>
+										view === 'month' && // Block day tiles only
+										getTakenDates().some(
+											(disabledDate) =>
+												date.getFullYear() === disabledDate.getFullYear() &&
+												date.getMonth() === disabledDate.getMonth() &&
+												date.getDate() === disabledDate.getDate()
+										)
+									}
+									className={['calendar']}
+								/>
+							</div>
+							<div className='mb-1 ml-3'>Take time slot</div>
+							<Select
+								classNames={{
+									control: ({ isFocused }) =>
+										clsx(
+											'w-[18vw] h-[5vh] rounded-xl mb-11',
+											isFocused ? 'border-gray' : 'border-primary'
+										),
+								}}
 							/>
 						</div>
 					</div>

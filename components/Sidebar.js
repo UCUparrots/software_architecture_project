@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { VscLink } from 'react-icons/vsc';
+import { VscGroupByRefType, VscLink } from 'react-icons/vsc';
 import { BiUser, BiMenu, BiLogOutCircle } from 'react-icons/bi';
 import { BsFillPersonVcardFill, BsCalendarCheck } from 'react-icons/bs';
 import { AiFillSchedule } from 'react-icons/ai';
@@ -7,8 +7,6 @@ import { FaUsers } from 'react-icons/fa';
 import Link from 'next/link';
 import { useContext } from 'react';
 import { MyContext } from '@/AppStateProvider';
-
-import { useState } from 'react';
 
 function Sidebar() {
 	const { isActive, setIsActive, isDoctor } = useContext(MyContext);
@@ -21,7 +19,7 @@ function Sidebar() {
 
 	return (
 		<div
-			className={`sidebar fixed top-0 left-0 h-full bg-primary-dark px-[14px] py-[6px]
+			className={`sidebar fixed top-0 left-0 h-full bg-primary-dark px-[14px] py-[6px] z-50
 		transition-all duration-500 ease-in-out ${isActive ? 'w-[240px]' : 'w-[78px]'}`}
 		>
 			<div className='logo_content'>
@@ -68,7 +66,7 @@ function Sidebar() {
 
 				{isDoctor ? (
 					<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
-						<Link className='sidebar-link' href='DoctorSchedulePage'>
+						<Link className='sidebar-link' href='/DoctorSchedulePage'>
 							<AiFillSchedule className='icon' />
 							<span
 								className={`transition-all duration-500 ease-in-out
@@ -92,7 +90,7 @@ function Sidebar() {
 					</li>
 				) : (
 					<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
-						<Link className='sidebar-link' href='/AppointmentPage'>
+						<Link className='sidebar-link' href='/NewAppointmentPage'>
 							<BsCalendarCheck className='icon' />
 							<span
 								className={`transition-all duration-500 ease-in-out
@@ -102,7 +100,7 @@ function Sidebar() {
 								: 'opacity-0 pointer-events-none'
 						}`}
 							>
-								Appointment
+								New Appointment
 							</span>
 						</Link>
 						<span
@@ -143,30 +141,55 @@ function Sidebar() {
 						</span>
 					</li>
 				)}
-
-				<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
-					<Link className='sidebar-link' href='/User/UserListPage'>
-						<FaUsers className='icon' />
-						<span
-							className={`transition-all duration-500 ease-in-out
+				{isDoctor ? (
+					<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
+						<Link className='sidebar-link' href='/User/UserListPage'>
+							<FaUsers className='icon' />
+							<span
+								className={`transition-all duration-500 ease-in-out
 						${
 							isActive
 								? 'opacity-1 pointer-events-auto'
 								: 'opacity-0 pointer-events-none'
 						}`}
-						>
-							Patients
-						</span>
-					</Link>
-					<span
-						className={`tooltip
+							>
+								Patients
+							</span>
+						</Link>
+						<span
+							className={`tooltip
 						group-hover:transition-all group-hover:duration-500 group-hover:ease-in-out
 						group-hover:opacity-100 group-hover:top-[50%] z-20
 						${isActive ? 'hidden' : 'block'}`}
-					>
-						Patients
-					</span>
-				</li>
+						>
+							Patients
+						</span>
+					</li>
+				) : (
+					<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
+						<Link className='sidebar-link' href='/AppointmentHistoryPage'>
+							<VscGroupByRefType className='icon' />
+							<span
+								className={`transition-all duration-500 ease-in-out
+						${
+							isActive
+								? 'opacity-1 pointer-events-auto'
+								: 'opacity-0 pointer-events-none'
+						}`}
+							>
+								Appointment history
+							</span>
+						</Link>
+						<span
+							className={`tooltip
+						group-hover:transition-all group-hover:duration-500 group-hover:ease-in-out
+						group-hover:opacity-100 group-hover:top-[50%] z-20
+						${isActive ? 'hidden' : 'block'}`}
+						>
+							History
+						</span>
+					</li>
+				)}
 			</ul>
 
 			<div className='absolute text-white bottom-0 left-0 w-full'>
@@ -196,7 +219,8 @@ function Sidebar() {
 							<div className='text-[12px]'>Doctor</div>
 						</div>
 					</div>
-					<div
+					<Link
+						href='/LoginPage'
 						className={` log-out-div
 					${isActive ? 'left-[88%] bg-none' : 'left-[50%] bg-primary'}`}
 					>
@@ -204,7 +228,7 @@ function Sidebar() {
 							className='icon text-[20px] text-white
 						transition-all duration-500 ease-in-out'
 						/>
-					</div>
+					</Link>
 				</div>
 			</div>
 		</div>

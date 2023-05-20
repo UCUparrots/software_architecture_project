@@ -15,7 +15,7 @@ function Signup() {
 	const [page, setPage] = useState(1);
 
 	const router = useRouter();
-	const { isDoctor } = useContext(MyContext);
+	const { isDoctor, setIsDoctor } = useContext(MyContext);
 
 	const redirect = () => {
 		if (isDoctor) {
@@ -132,15 +132,30 @@ function Signup() {
 								onChange={(e) => setResidence(e.target.value)}
 							/>
 						</div>
+						<div className='mt-2'>
+							<input
+								type='checkbox'
+								id='isDoctor'
+								name='isDoctor'
+								className='w-4 h-4 mr-3'
+								checked={isDoctor}
+								onChange={(event) => setIsDoctor(event.target.checked)}
+							/>
+							<label htmlFor='isDoctor' className='text-dark-gray'>
+								Are you a doctor?
+							</label>
+						</div>
 
-						<button
-							type='submit'
-							className='rounded-lg h-[5vh] w-[19vw]
+						<Link href='/InfoPage'>
+							<button
+								type='submit'
+								className='rounded-lg h-[5vh] w-[19vw]
 			bg-primary px-2 transition-all duration-500 ease-in-out text-white mt-[6vh]'
-							onClick={redirect}
-						>
-							SIGN UP
-						</button>
+								onClick={redirect}
+							>
+								SIGN UP
+							</button>
+						</Link>
 
 						<div className='flex text-sm mt-7 justify-center'>
 							<div>Already have an account?</div>

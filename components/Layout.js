@@ -3,12 +3,12 @@ import { useContext } from 'react';
 import { MyContext } from '@/AppStateProvider';
 
 function Layout({ children }) {
-	const { isActive, setIsActive } = useContext(MyContext);
+	const { isActive } = useContext(MyContext);
 
 	return (
 		<div
 			className='flex min-h-screen flex-col items-center 
-        justify-between p-24 relative w-full overflow-hidden bg-white'
+        justify-between p-10 relative w-full overflow-hidden bg-white'
 		>
 			<Sidebar />
 

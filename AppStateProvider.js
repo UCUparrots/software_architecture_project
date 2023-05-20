@@ -4,14 +4,14 @@ export const MyContext = createContext();
 
 function AppStateProvider({ children }) {
 	const [isActive, setIsActive] = useState(false);
-	const [isDoctor, setisDoctor] = useState(true);
+	const [isDoctor, setIsDoctor] = useState(false);
 	const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
 
 	const value = {
 		isActive,
 		setIsActive,
 		isDoctor,
-		setisDoctor,
+		setIsDoctor,
 		isAppointmentOpen,
 		setIsAppointmentOpen,
 	};

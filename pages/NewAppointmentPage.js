@@ -6,7 +6,7 @@ function NewAppointmentPage() {
 		<Layout>
 			<div>
 				<h1 className='text-[46px] font-medium m-[12px] text-primary-dark'>
-					Create Appointment
+					New Appointment
 				</h1>
 				<NewAppointment />
 			</div>
