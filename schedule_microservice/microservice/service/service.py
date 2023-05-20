@@ -3,6 +3,7 @@ import json
 sys.path.append('./opt/app/domain')
 sys.path.append('./opt/app/repository')
 from domain_objects import Timeslot, Message, OptMessage, CustomEncoder
+from typing import List
 from uuid import UUID, uuid4
 from repository import RepositoryLayer
 
@@ -11,29 +12,18 @@ class ServiceLayer:
     def __init__(self):
         self.repository = RepositoryLayer()
 
-    def get_appointments(self, optmessage: OptMessage):
-        past = self.repository.get_past_appointments(optmessage)
-        future = self.repository.get_future_appointments(optmessage)
-        past.extend(future)
-        
-        return json.dumps(past, cls=CustomEncoder)
+    def get_timeslots(self, optmessage: OptMessage):
+        timeslots = self.repository.get_timeslots(optmessage)
+        return json.dumps(timeslots, cls=CustomEncoder)
     
-    def get_future_appointments(self, optmessage: OptMessage):
-        future = self.repository.get_future_appointments(optmessage)
-        return json.dumps(future, cls=CustomEncoder)
+    def new_timeslots(self, timeslots: List[Timeslot]):
+        result = True
+        for timeslot in timeslots:
+            curr_res = self.repository.save_timeslot(timeslot)
+            if not curr_res:
+                result = False
+        return result
     
-    def get_past_appointments(self, optmessage: OptMessage):
-        future = self.repository.get_past_appointments(optmessage)
-        return json.dumps(future, cls=CustomEncoder)
-    
-    def create_appointment(self, appointment: Appointment):
-        return self.repository.save_appointment(appointment)
-    
-    def delete_appointment(self, appointment_id: UUID):
-        check = self.repository.check_if_future(appointment_id)
-        if check:
-            return self.repository.delete_future_appointment(appointment_id)
-        return self.repository.delete_past_appointment(appointment_id)
-    
-    def confirm_appointment(self, appointment_id: UUID):
-        return self.repository.confirm_appointment(appointment_id)
+    def delete_timeslot(self, timeslot_id: UUID):
+        # need to somehow communicate with Vlad's microservice to find out if timeslot is taken for an appointment
+        return self.repository.delete_timeslot(timeslot_id)

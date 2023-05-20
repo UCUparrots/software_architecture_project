@@ -23,14 +23,13 @@ class OptMessage(BaseModel):
     date: Optional[pd.Timestamp] = None
 
 
-# class CustomEncoder(json.JSONEncoder):
-#     def default(self, obj):
-#         if isinstance(obj, Appointment):
-#             return {
-#                 'id': str(obj.id),
-#                 'doctor': str(obj.doctor),
-#                 'patient': str(obj.patient),
-#                 'type': obj.type.value,
-#                 'date': obj.date.strftime('%Y-%m-%d %H:%M:%S')
-#             }
-#         return super().default(obj)
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Timeslot):
+            return {
+                'timeslot_id': str(obj.timeslot_id),
+                'doctor': str(obj.doctor),
+                'date': obj.date.strftime('%Y-%m-%d %H:%M:%S'),
+                'availability': str(obj.availability)
+            }
+        return super().default(obj)
