@@ -1,5 +1,3 @@
-DROP TABLE DiagnosisHistory;
-
 CREATE TABLE DiagnosisHistory (
   patient_id UUID,
   doctor_id UUID,

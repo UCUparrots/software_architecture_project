@@ -2,6 +2,7 @@ import uvicorn
 from fastapi import FastAPI
 import sys
 from os import path
+
 ROOT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 sys.path.append(ROOT_DIR)
 from service.service import CardService

@@ -4,19 +4,19 @@ ROOT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 sys.path.append(ROOT_DIR)
 from domain.AppointmentNotes import AppointmentNotes
 from domain.MedCardInfo import MedCardInfo
-from repository.helpers import get_doctor_info, get_patient_info, get_patient_appointments, add_info, update_is_relevant, Repository
+from repository.repository import Repository
 
 
 class CardService:
     def __init__(self):
         self.repository = Repository()
 
-    def form_medcard(self, patient_uuid):
+    def form_medcard(self, patient_uuid) -> dict:
         """
         :param patient_uuid: ID of the patient.
-        :return: MedCardInfo object.
+        :return: vars of MedCardInfo object.
         """
-        user = self.repository.get_patient_appointments('a44b56a7-7aa5-4b02-8b02-9a3f2f03a5d3')
+        user = self.repository.get_patient_appointments(patient_uuid)
         apps = self.form_appointment_info(user)
         user_info = self.repository.get_user_info(user[0][0])
         print(user_info, 'user_info')
