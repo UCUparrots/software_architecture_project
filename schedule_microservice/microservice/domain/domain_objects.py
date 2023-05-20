@@ -30,6 +30,6 @@ class CustomEncoder(json.JSONEncoder):
                 'timeslot_id': str(obj.timeslot_id),
                 'doctor': str(obj.doctor),
                 'date': obj.date.strftime('%Y-%m-%d %H:%M:%S'),
-                'availability': str(obj.availability)
+                'availability': obj.availability
             }
         return super().default(obj)
