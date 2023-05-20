@@ -41,3 +41,51 @@ def update_is_relevant(ids: dict) -> bool:
     :return: True if successfully updated diagnosis status.
     """
     return True
+
+
+import psycopg2
+
+
+
+class Repository:
+    def __init__(self):
+        self.connection = psycopg2.connect(database='test_db', user='postgres',
+                        password='postgres', host='postgres-1')
+        self.cursor = self.connection.cursor()
+
+    def get_patient_appointments(self, patient_id) -> list:
+        sql = f"SELECT * FROM DiagnosisHistory WHERE patient_id='{patient_id}'"
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        return result
+
+    def get_user_info(self, user_id):
+        sql = f"SELECT * FROM UserTable WHERE user_id='{user_id}'"
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        if not result:
+            uid, email, ph, name, surname, phone, birthdate, phd, spec = [None for _ in range(9)]
+        else:
+            uid, email, ph, name, surname, phone, birthdate, phd, spec = result[0]
+        info = {'name': name, 'surname': surname, 'phone': phone, 'email': email, 'birthdate': birthdate, 'doctor_phd': phd, 'doctor_specialization': spec}
+        return info
+
+    def add_info(self, apps: AppointmentNotes) -> bool:
+        start_date, notes, medicine, is_relevant, resolved_date = '2023-05-20 10:00:00', 'notes_1', '', 1, '2023-05-21 12:00:00'
+        sql = f"""INSERT INTO DiagnosisHistory (patient_id, doctor_id, diagnosis, start_date, notes, medicine, is_relevant, resolved_date)
+VALUES
+    ('{apps.patient_id}', '{apps.doctor_id}', '{apps.diagnosis}', '{start_date}', '{notes}', '{medicine}', {is_relevant}, '{resolved_date}');
+"""
+        self.cursor.execute(sql)
+
+        sql = f"""INSERT INTO UserTable (user_id, email, password_hash, name, surname, phone, birthdate, doctorPhD, doctor_specialization)
+        VALUES
+            ('{apps.patient_id}', '', '', 'New', 'Sur', '+380', '{'2023-05-20 10:00:00'}', 'doctorPhD', 'doctor_specialization');
+        """
+        self.cursor.execute(sql)
+        return True
+
+    def update_is_relevant(self, appointment_id: str) -> bool:
+        # sql =
+        # self.cursor.execute(sql)
+        return True

@@ -4,43 +4,53 @@ ROOT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 sys.path.append(ROOT_DIR)
 from domain.AppointmentNotes import AppointmentNotes
 from domain.MedCardInfo import MedCardInfo
-from repository.helpers import get_doctor_info, get_patient_info, get_patient_appointments, add_info, update_is_relevant
+from repository.helpers import get_doctor_info, get_patient_info, get_patient_appointments, add_info, update_is_relevant, Repository
 
 
 class CardService:
+    def __init__(self):
+        self.repository = Repository()
 
     def form_medcard(self, patient_uuid):
         """
         :param patient_uuid: ID of the patient.
         :return: MedCardInfo object.
         """
-        user = get_patient_info(patient_uuid)
-        apps = self.form_appointment_info(get_patient_appointments(patient_uuid))
+        user = self.repository.get_patient_appointments('a44b56a7-7aa5-4b02-8b02-9a3f2f03a5d3')
+        apps = self.form_appointment_info(user)
+        user_info = self.repository.get_user_info(user[0][0])
+        print(user_info, 'user_info')
 
-        return vars(MedCardInfo(user['name'], user['email'],
-                                user['phone'], user['birthdate'], apps))
+        return vars(MedCardInfo(user_info['name'] + user_info['surname'], user_info['email'],
+                                user_info['phone'], user_info['birthdate'], apps))
 
-    @staticmethod
-    def form_appointment_info(apps) -> list:
+    def parse_appointment_tuple(self, appoint: tuple) -> dict:
+        patient_id, doctor_id, diagnosis, start_date, notes, medicine, is_relevant, resolved_date = appoint
+
+        return {'patient_id': patient_id, 'doctor_id': doctor_id,
+                'diagnosis': diagnosis, 'start_date': start_date,
+                'notes': notes, 'medicine': medicine, 'is_relevant': is_relevant,
+                'resolved_date': resolved_date}
+
+
+    def form_appointment_info(self, apps) -> list:
         appointments = []
         for app in apps:
-            doctor = get_doctor_info(app['doctor_id'])
+            app = self.parse_appointment_tuple(app)
+            doctor = self.repository.get_user_info(app['doctor_id'])
             appointments.append({'doctor_type': doctor['doctor_specialization'],
                                  'doctor_name': doctor['name'],
-                                 # 'appointment_type': app['type'],
                                  'diagnosis': app['diagnosis'],
-                                 'notes_from_doctor': app['notes_from_doctor'],
+                                 'notes_from_doctor': app['notes'],
                                  'is_relevant': app['is_relevant'],
                                  'resolved_date': app['resolved_date'],
                                  'start_date': app['start_date'],
                                  'medicine': app['medicine']})
         return appointments
 
-    @staticmethod
-    def update_medcard(app_notes: AppointmentNotes) -> bool:
+    def update_medcard(self, app_notes: AppointmentNotes) -> bool:
         # add appointment to database
-        return add_info(app_notes)
+        return self.repository.add_info(app_notes)
 
-    @staticmethod
-    def resolve_sickness(patient_id, appointment_id) -> bool:
-        return update_is_relevant({'patient_id': patient_id, 'appointment_id': appointment_id})
+    def resolve_sickness(self, appointment_id) -> bool:
+        return self.repository.update_is_relevant(appointment_id)
