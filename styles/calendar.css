@@ -1,0 +1,44 @@
+/* Change the background color of the calendar */
+.fc {
+	width: 60vw;
+	height: 60vh;
+}
+.fc table {
+	border-radius: 7px; /* Set the desired border radius */
+	overflow: hidden; /* Ensure the content stays within the rounded boundaries */
+}
+/* Change the font color of the calendar header */
+.fc-header-toolbar {
+	color: #333;
+}
+
+/* Change the background color of the event */
+.fc-event {
+	background-color: #4a148c;
+	color: #fff;
+}
+
+/* Change the color of the FullCalendar toolbar buttons */
+.fc-toolbar .fc-button {
+	background-color: #4a148c; /* Set your desired background color */
+	color: #ffffff; /* Set your desired text color */
+}
+
+/* Change the hover color of the FullCalendar toolbar buttons */
+.fc-toolbar .fc-button:hover {
+	background-color: #6a1b9a; /* Set your desired hover background color */
+	color: #ffffff; /* Set your desired hover text color */
+}
+
+/* Change the active color of the FullCalendar toolbar buttons */
+.fc-toolbar .fc-button:active,
+.fc-toolbar .fc-button.fc-state-active {
+	background-color: #36185a; /* Set your desired active background color */
+	color: #ffffff; /* Set your desired active text color */
+}
+
+/* Change the color of the FullCalendar header row */
+.fc-col-header {
+	background-color: #f6f6f6; /* Set your desired background color */
+	color: #000; /* Set your desired text color */
+}
