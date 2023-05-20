@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from reason import Reason
 from uuid import UUID
 import pandas as pd
 from enum import Enum
