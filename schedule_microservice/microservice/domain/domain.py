@@ -1,5 +1,8 @@
-from domain_objects import Appointment, Message, OptMessage
+from domain_objects import Timeslot, Message, OptMessage
 from uuid import uuid4
+import pandas as pd
+
+
 class DomainLayer:
 
     def __init__(self):
@@ -15,32 +18,27 @@ class DomainLayer:
         opt = OptMessage.parse_obj(json)
         return opt
     
-    @staticmethod
-    def create_appointment(data: dict):
-        data['id'] = uuid4()
-        appointment = Appointment.parse_obj(data)
-        return appointment
+    # @staticmethod
+    def create_timeslot(data: dict):
+        data['timeslot_id'] = uuid4()
+        timeslot = Timeslot.parse_obj(data)
+        return timeslot
+    
+    # @staticmethod
+    def create_timeslots(self, data: dict):
+        interval = pd.Timedelta(minutes=15)  # Define the desired interval
+        timestamps = pd.date_range(start=data["start_date"], end=data["end_date"], freq=interval).tolist()
+        timeslots = []
+
+        for timestamp in timestamps:
+            tmstmp_dct = {}
+            tmstmp_dct["doctor"] = data["doctor"]
+            tmstmp_dct["date"] = timestamp
+            tmstmp_dct["availability"] = True
+            timeslot = self.create_timeslot(tmstmp_dct)
+            timeslots.append(timeslot)
+        return timeslots
     
     @staticmethod
-    def recreate_appointment(data: dict):
-        appointment = Appointment.parse_obj(data)
-        return appointment
-    
-    @staticmethod
-    def get_appointment_id(json: dict):
-        return json['appointment_id']
-    
-    @staticmethod
-    def recreate_appointments(appointments: list[tuple]):
-        lst_obj = []
-        for row in appointments:
-            dct = {
-                'id': row[0],
-                'doctor': row[1],
-                'patient': row[2],
-                'type': row[3],
-                'date': row[4]
-            }
-            appointment = DomainLayer.recreate_appointment(dct)
-            lst_obj.append(appointment)
-        return lst_obj
+    def get_timeslot_id(json: dict):
+        return json['timeslot_id']

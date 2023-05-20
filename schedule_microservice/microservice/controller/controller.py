@@ -6,7 +6,7 @@ import time
 sys.path.append('./opt/app/domain')
 sys.path.append('./opt/app/service')
 
-from domain_objects import Schedule, Message # no idea if that's what I need
+from domain_objects import Timeslot, Message, OptMessage # no idea if that's what I need
 from domain import DomainLayer
 from service import ServiceLayer
 
@@ -25,7 +25,7 @@ class ControlerLayer():
         
         @self.app.get('/get_timeslots')
         def get_timeslots(args: dict):
-            optmessage = DomainLayer.create_opt_message(args)
+            optmessage = DomainLayer.create_message(args)
             timeslots = self.service.get_timeslots(optmessage)
             return timeslots
         
