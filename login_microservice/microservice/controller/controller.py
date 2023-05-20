@@ -26,10 +26,8 @@ class ControlerLayer():
 
         @self.app.post('/signup')
         def signup(args: dict):
-            print("SIGNING UP ATTEMPT")
             user = DomainLayer.create_signup(args)
             status = self.service.save_user(user)
-            print("SIGNUP STATUS", status)
             return status
         
         @self.app.post('/login')
