@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from reason import Reason
 from uuid import UUID
 import pandas as pd
 from enum import Enum
@@ -18,10 +17,10 @@ class Message(BaseModel):
     date: pd.Timestamp
 
 class OptMessage(BaseModel):
-    timestamp_id: Optional[UUID] = None
+    timeslot_id: Optional[UUID] = None
     doctor: Optional[UUID] = None
     date: Optional[pd.Timestamp] = None
-
+    availability: Optional[bool] = None
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):

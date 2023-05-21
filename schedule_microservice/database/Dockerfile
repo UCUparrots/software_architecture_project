@@ -1,5 +1,11 @@
-FROM postgres:13-alpine
+# FROM postgres:13-alpine
 
-COPY ./data /opt/app/data
+# COPY ./data /opt/app/data
+# COPY ./scripts/startup.sh /docker-entrypoint-initdb.d/startup.sh
+# COPY ./scripts /opt/app/scripts
+
+FROM cassandra
+
+# COPY ./data /opt/app/data
 COPY ./scripts/startup.sh /docker-entrypoint-initdb.d/startup.sh
 COPY ./scripts /opt/app/scripts

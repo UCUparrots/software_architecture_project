@@ -19,13 +19,14 @@ class DomainLayer:
         return opt
     
     # @staticmethod
-    def create_timeslot(data: dict):
+    def create_timeslot(self, data: dict):
         data['timeslot_id'] = uuid4()
         timeslot = Timeslot.parse_obj(data)
         return timeslot
     
     # @staticmethod
     def create_timeslots(self, data: dict):
+        print("Start create timeslots")
         interval = pd.Timedelta(minutes=15)  # Define the desired interval
         timestamps = pd.date_range(start=data["start_date"], end=data["end_date"], freq=interval).tolist()
         timeslots = []
