@@ -10,7 +10,7 @@ from repository import RepositoryLayer
 
 class ServiceLayer:
     def __init__(self):
-        self.repository = RepositoryLayer()
+        self.repository = RepositoryLayer(host='cassandra-node', port=9042)
 
     def get_timeslots(self, optmessage: OptMessage):
         timeslots = self.repository.get_timeslots(optmessage)
@@ -19,6 +19,7 @@ class ServiceLayer:
     def new_timeslots(self, timeslots: List[Timeslot]):
         result = True
         for timeslot in timeslots:
+            print(timeslot, "!!!")
             curr_res = self.repository.save_timeslot(timeslot)
             if not curr_res:
                 result = False
