@@ -1,0 +1,102 @@
+version: '3'
+
+services:
+  appointment-service:
+    build: ./appointments_microservice/microservice
+    container_name: appointmentService
+    environment:
+      - APP_PORT=8085
+      - APP_NAME=appointmentService
+    ports:
+      - "8085:8085"
+    networks:
+    - project-network
+
+  postgres-1:
+    build: ./appointments_microservice/database
+    container_name: postgres-1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test_db
+    ports:
+      - "5432:5432"
+    networks:
+      - project-network
+
+  zookeeper-server:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper-server
+    environment:
+      - "ALLOW_ANONYMOUS_LOGIN=yes"
+    networks:
+      - project-network
+
+
+  kafka-server:
+    image: bitnami/kafka:latest
+    container_name: kafka-server
+    environment:
+      - "ALLOW_PLAINTEXT_LISTENER=yes"
+      - "KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181"
+    depends_on:
+      - zookeeper-server
+    networks:
+      - project-network
+
+  spark:
+    image: docker.io/bitnami/spark:3.2
+    networks:
+      - project-network
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    
+  spark-worker:
+    image: docker.io/bitnami/spark:3.2
+    networks:
+      - project-network
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+  
+
+
+
+  login-service:
+    build: ./login_microservice/microservice
+    container_name: loginService
+    environment:
+      - APP_PORT=8086
+      - APP_NAME=loginService
+    ports:
+      - "8086:8086"
+    depends_on:
+      - postgres-2
+    networks:
+    - project-network
+
+  postgres-2:
+    build: ./login_microservice/database
+    container_name: postgres-2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test_user_db
+    ports:
+      - "5433:5432"
+    networks:
+      - project-network
+
+networks:
+  project-network:
+    name: project-network

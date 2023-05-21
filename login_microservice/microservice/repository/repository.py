@@ -13,7 +13,7 @@ import psycopg2.extras
 class RepositoryLayer:
     def __init__(self):
         self.connection = psycopg2.connect(database='test_user_db', user='postgres', 
-                        password='postgres', host='postgres-1')
+                        password='postgres', host='postgres-2')
         self.cursor = self.connection.cursor()
         psycopg2.extras.register_uuid()
     
