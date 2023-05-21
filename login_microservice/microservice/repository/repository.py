@@ -104,8 +104,9 @@ class RepositoryLayer:
                 "phone": str(user_data[5]),
                 "birthdate": user_data[6].strftime('%Y-%m-%d'),
                 "is_doctor": user_data[7],
-                "doctor_phd": user_data[8],
-                "doctor_specialization": user_data[9]
+                "notification": user_data[8],
+                "doctor_phd": user_data[9],
+                "doctor_specialization": user_data[10]
             }
             return data
         except Exception as e:

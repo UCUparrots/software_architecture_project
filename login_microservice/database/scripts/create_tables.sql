@@ -7,6 +7,7 @@ CREATE TABLE users (
     phone VARCHAR(20),
     birthdate DATE,
     is_doctor BOOLEAN DEFAULT FALSE,
+    notification BOOLEAN DEFAULT FALSE,
     doctor_phd INT DEFAULT NULL,
     doctor_specialization VARCHAR(100) DEFAULT NULL
 );
