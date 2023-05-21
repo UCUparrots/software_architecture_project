@@ -1,13 +1,27 @@
-GET http://0.0.0.0:8080/medcard_service?uuid=1d946fce-456d-4b27-9d15-23f173963a14
+GET http://0.0.0.0:8080/form_medcard?uuid=1d0d1f8b-68b6-4c89-9761-950db9a4a6a2
 ###
 
-POST http://0.0.0.0:8080/medcard_service
+POST http://0.0.0.0:8080/update_medcard
 Content-Type: application/json
 
 {
-  "patient_id": "1d946fce-456d-4b27-9d15-23f173963a14",
+  "patient_id": "1d0d1f8b-68b6-4c89-9761-950db9a4a6a2",
   "doctor_id": "d8e2d68e-20c1-4e0d-b52e-8209ab07b5c8",
-  "appointment_id": "3ec6a5fb-8a7f-4919-a6fe-b5379e431d28",
-  "diagnosis": "new diagnosis"
+  "diagnosis_id": "2e4c874e-9361-4a76-bbaf-49f4ae5e7c09",
+  "diagnosis": "aaaaa :((((((((",
+  "start_date": "2023-10-10 10:00:00",
+  "notes": "note from me",
+  "medicine": "som meds",
+  "is_relevant": 1,
+  "resolved_date": ""
+}
+###
+
+POST http://0.0.0.0:8080/update_diagnosis_status
+Content-Type: application/json
+
+{
+  "diagnosis_id": "2e4c874e-9361-4a76-bbaf-49f4ae5e7c09",
+  "resolved_date": "2023-07-10 10:00:00"
 }
 ###

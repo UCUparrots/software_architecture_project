@@ -14,11 +14,11 @@ services:
 
   postgres-1:
     build: ./database
-    container_name: postgres-1
+    container_name: postgres-medcard
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: test_db
+      POSTGRES_DB: medcard_db
     # user: postgres
     # healthcheck:
     #   test: [ "CMD-SHELL", "pg_isready" ]

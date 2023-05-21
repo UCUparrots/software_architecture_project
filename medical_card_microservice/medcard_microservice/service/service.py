@@ -1,33 +1,34 @@
 import sys
 from os import path
+
 ROOT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 sys.path.append(ROOT_DIR)
 from domain.AppointmentNotes import AppointmentNotes
 from domain.MedCardInfo import MedCardInfo
-from repository.helpers import get_doctor_info, get_patient_info, get_patient_appointments, add_info, update_is_relevant, Repository
+from domain.RelevantUpdateData import RelevantData
+from repository.repository import Repository
 
 
 class CardService:
     def __init__(self):
         self.repository = Repository()
 
-    def form_medcard(self, patient_uuid):
+    def form_medcard(self, patient_uuid) -> dict:
         """
         :param patient_uuid: ID of the patient.
-        :return: MedCardInfo object.
+        :return: vars of MedCardInfo object.
         """
-        user = self.repository.get_patient_appointments('a44b56a7-7aa5-4b02-8b02-9a3f2f03a5d3')
+        user = self.repository.get_patient_appointments(patient_uuid)
         apps = self.form_appointment_info(user)
-        user_info = self.repository.get_user_info(user[0][0])
-        print(user_info, 'user_info')
+        user_info = self.repository.get_user_info(patient_uuid)
 
-        return vars(MedCardInfo(user_info['name'] + user_info['surname'], user_info['email'],
+        return vars(MedCardInfo(user_info['name'] + ' ' + user_info['surname'], user_info['email'],
                                 user_info['phone'], user_info['birthdate'], apps))
 
     def parse_appointment_tuple(self, appoint: tuple) -> dict:
-        patient_id, doctor_id, diagnosis, start_date, notes, medicine, is_relevant, resolved_date = appoint
+        patient_id, doctor_id, diagnosis_id, diagnosis, start_date, notes, medicine, is_relevant, resolved_date = appoint
 
-        return {'patient_id': patient_id, 'doctor_id': doctor_id,
+        return {'patient_id': patient_id, 'doctor_id': doctor_id, 'diagnosis_id': diagnosis,
                 'diagnosis': diagnosis, 'start_date': start_date,
                 'notes': notes, 'medicine': medicine, 'is_relevant': is_relevant,
                 'resolved_date': resolved_date}
@@ -52,5 +53,5 @@ class CardService:
         # add appointment to database
         return self.repository.add_info(app_notes)
 
-    def resolve_sickness(self, appointment_id) -> bool:
-        return self.repository.update_is_relevant(appointment_id)
+    def resolve_sickness(self, info: RelevantData) -> bool:
+        return self.repository.update_is_relevant(info)
