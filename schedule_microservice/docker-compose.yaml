@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  cassandra-node:
+    # build: ./database
+    image: cassandra:latest
+    container_name: cassandra-node
+    networks:
+      - project-network
+    ports:
+      - "9042:9042"
+    # volumes:
+    #   - ./scripts:/opt/app/scripts
+    #   # - ./data:/opt/app/data
+    #   - ./scripts/startup.sh:/docker-entrypoint-initdb.d/startup.sh
+
+  cassandra_temp:
+    image: cassandra:latest
+    volumes:
+      - ./database/scripts/bash:/docker-entrypoint.sh
+      - ./database/scripts/cql:/tmp/cql
+    networks:
+      - project-network
+    command: >
+      bash ./docker-entrypoint.sh/startup.sh
+
+  schedule-service:
+    build: ./microservice
+    container_name: scheduleService
+    environment:
+      - APP_PORT=8080
+      - APP_NAME=scheduleService
+    ports:
+      - "8080:8080"
+    networks:
+      - project-network
+
+networks:
+  project-network:
+    name: project-network
