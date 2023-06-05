@@ -8,6 +8,7 @@ from cassandra.cluster import Cluster
 from cassandra.cluster import NoHostAvailable
 from cassandra.query import ordered_dict_factory
 import time
+import json
 
 
 class RepositoryLayer:
@@ -24,7 +25,8 @@ class RepositoryLayer:
     #     else:
     #         self.session = cluster.connect(keyspace)
     #         self.session.row_factory = ordered_dict_factory
-
+    
+    
     def connect_cassandra(self, keyspace=None, max_retries=100, retry_delay=5):
         retry_count = 0
         while retry_count < max_retries and not self.session:
@@ -97,7 +99,7 @@ class RepositoryLayer:
         #     print(rows)
         #     return rows
         try:
-            print(self.execute_query('DESCRIBE TABLES'))
+            print(self.execute_query('DESCRIBE TABLES;'))
             if columns == []:
                 rows = self.execute_query("SELECT * FROM Timeslots;")
                 print("ROWS")
@@ -108,8 +110,9 @@ class RepositoryLayer:
                 print(self.session)
                 condition = " AND ".join(f"{col} = {values[idx]}" for idx, col in enumerate(columns))
                 sql = f"SELECT * FROM Timeslots WHERE {condition};"
-                rows = self.execute_query(sql)
-                return rows
+                print(sql)
+                rows = self.session.execute(sql)
+                return json.dumps(rows.all(), default=DomainLayer.convert_uuid_to_str)
         except NoHostAvailable:
             print("Unable to connect to Cassandra. Check Cassandra service status.")
         except Exception as e:
@@ -124,3 +127,5 @@ class RepositoryLayer:
         except:
             return False
         return True
+
+    

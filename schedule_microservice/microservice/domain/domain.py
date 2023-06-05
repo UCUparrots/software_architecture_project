@@ -1,6 +1,7 @@
 from domain_objects import Timeslot, Message, OptMessage
 from uuid import uuid4
 import pandas as pd
+from uuid import UUID
 
 
 class DomainLayer:
@@ -43,3 +44,9 @@ class DomainLayer:
     @staticmethod
     def get_timeslot_id(json: dict):
         return json['timeslot_id']
+    
+    @staticmethod
+    def convert_uuid_to_str(item):
+        if isinstance(item, UUID):
+            return str(item)
+        return item
