@@ -33,11 +33,11 @@ CREATE KEYSPACE schedule WITH REPLICATION = {'class' : 'SimpleStrategy', 'replic
 USE schedule;
 
 CREATE TABLE Timeslots (
-    timeslot_id text,
-    doctor text,
+    timeslot_id UUID,
+    doctor UUID,
     date text,
     availability boolean,
     PRIMARY KEY (timeslot_id)
 );
 
--- DESCRIBE TABLES;
+DESCRIBE TABLES;

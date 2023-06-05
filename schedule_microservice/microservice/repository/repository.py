@@ -1,5 +1,6 @@
 import sys
 sys.path.append('./opt/app/domain')
+import pandas as pd
 from domain_objects import Timeslot, Message, OptMessage
 from domain import DomainLayer
 from uuid import UUID
@@ -26,17 +27,16 @@ class RepositoryLayer:
 
     def connect_cassandra(self, keyspace=None, max_retries=100, retry_delay=5):
         retry_count = 0
-        # while retry_count < max_retries:
-        while not self.session:
+        while retry_count < max_retries and not self.session:
             try:
                 cluster = Cluster([self.host], port=self.port)
                 if keyspace is None:
                     self.session = cluster.connect()
                 else:
-                    self.session = cluster.connect(keyspace)
+                    self.session = cluster.connect(keyspace, wait_for_all_pools=True)
                     self.session.row_factory = ordered_dict_factory
+                    self.session.execute('USE schedule')
                 print("Successful connection!")
-                break  # Connection successful, exit the loop
             except Exception as e:
                 print(f"Failed to connect to Cassandra: {str(e)}")
                 print("Retrying connection...")
@@ -97,10 +97,15 @@ class RepositoryLayer:
         #     print(rows)
         #     return rows
         try:
+            print(self.execute_query('DESCRIBE TABLES'))
             if columns == []:
                 rows = self.execute_query("SELECT * FROM Timeslots;")
-                return rows
+                print("ROWS")
+                print(pd.DataFrame(list(rows)))
+                return rows.all()
             else:
+                print("IN ELSE")
+                print(self.session)
                 condition = " AND ".join(f"{col} = {values[idx]}" for idx, col in enumerate(columns))
                 sql = f"SELECT * FROM Timeslots WHERE {condition};"
                 rows = self.execute_query(sql)
