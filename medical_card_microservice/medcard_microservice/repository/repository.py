@@ -6,6 +6,7 @@ ROOT_DIR = path.dirname(path.dirname(path.abspath(__file__)))
 sys.path.append(ROOT_DIR)
 from domain.AppointmentNotes import AppointmentNotes
 from domain.RelevantUpdateData import RelevantData
+from domain.User import UserInfo
 
 
 class Repository:
@@ -13,6 +14,19 @@ class Repository:
         self.connection = psycopg2.connect(database='medcard_db', user='postgres',
                         password='postgres', host='postgres-medcard')
         self.cursor = self.connection.cursor()
+
+    def add_user_info(self, user: UserInfo):
+        sql = f"""INSERT INTO UserTable (user_id, email, name, surname, phone, birthdate, doctorPhD, doctor_specialization)
+        VALUES
+            ('{user.user_id}', '{user.email}', '{user.name}','{user.surname}', '{user.phone}', '{user.birthdate}', '{user.doctorPhD}', '{user.doctor_specialization}');
+        """
+        try:
+            self.cursor.execute(sql)
+            self.connection.commit()
+            return True
+        except Exception as e:
+            logging.error(f"Error occurred during update: {str(e)}")
+            return False
 
     def get_patient_appointments(self, patient_id) -> list:
         sql = f"SELECT * FROM DiagnosisHistory WHERE patient_id='{patient_id}';"
@@ -25,7 +39,7 @@ class Repository:
         self.cursor.execute(sql)
         result = self.cursor.fetchall()
         if not result:
-            uid, email, name, surname, phone, birthdate, phd, spec = [None for _ in range(9)]
+            uid, email, name, surname, phone, birthdate, phd, spec = [None for _ in range(8)]
         else:
             uid, email, name, surname, phone, birthdate, phd, spec = result[0]
         info = {'name': name, 'surname': surname, 'phone': phone,
@@ -54,6 +68,7 @@ VALUES
             return True
         except Exception as e:
             logging.error(f"Error occurred during update: {str(e)}")
+            return False
 
 
     def update_is_relevant(self, info: RelevantData) -> bool:
