@@ -6,6 +6,7 @@ sys.path.append(ROOT_DIR)
 from domain.AppointmentNotes import AppointmentNotes
 from domain.MedCardInfo import MedCardInfo
 from domain.RelevantUpdateData import RelevantData
+from domain.User import UserInfo
 from repository.repository import Repository
 
 
@@ -26,6 +27,8 @@ class CardService:
                                 user_info['phone'], user_info['birthdate'], apps))
 
     def parse_appointment_tuple(self, appoint: tuple) -> dict:
+        if not appoint:
+            return {}
         patient_id, doctor_id, diagnosis_id, diagnosis, start_date, notes, medicine, is_relevant, resolved_date = appoint
 
         return {'patient_id': patient_id, 'doctor_id': doctor_id, 'diagnosis_id': diagnosis,
@@ -35,6 +38,8 @@ class CardService:
 
 
     def form_appointment_info(self, apps) -> list:
+        if not apps:
+            return []
         appointments = []
         for app in apps:
             app = self.parse_appointment_tuple(app)
@@ -55,3 +60,6 @@ class CardService:
 
     def resolve_sickness(self, info: RelevantData) -> bool:
         return self.repository.update_is_relevant(info)
+
+    def add_user_to_db(self, info: UserInfo) -> bool:
+        return self.repository.add_user_info(info)
