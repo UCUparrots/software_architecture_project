@@ -7,6 +7,8 @@ import psycopg2
 import bcrypt
 from datetime import datetime
 import psycopg2.extras
+import json
+import requests
 
 
 
@@ -19,15 +21,19 @@ class RepositoryLayer:
     
     def save_user(self, user: SignUp):
         # save user to rdbms
-        sql = "INSERT INTO users (user_id, email, password_hash, firstname, surname, phone, birthdate, is_doctor) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
+        sql = "INSERT INTO users (user_id, email, password_hash, firstname, surname, phone, birthdate, is_doctor, notification) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
 
         try:
             salt = bcrypt.gensalt()
   
             # Hashing the password
             hash = bcrypt.hashpw(user.password_hash.encode("utf-8"), salt)
+        
+            if user.notification is None:
+                user.notification = True
+                
             self.cursor.execute(sql, (str(user.user_id), str(user.email), str(hash), str(user.firstname), 
-                                str(user.lastname), str(user.phone), str(user.birthdate), str(user.is_doctor)))
+                                str(user.lastname), str(user.phone), str(user.birthdate), str(user.is_doctor), str(user.notification)))
             self.connection.commit()
             return user.user_id
         except Exception as e:
