@@ -10,6 +10,7 @@ from domain_objects import SignUp, LogIn, UserInfoUpdate
 from domain import DomainLayer
 from service import ServiceLayer
 
+MEDCARD_URL_PLACEHOLDER = ""
 
 
 class ControlerLayer():
@@ -17,17 +18,12 @@ class ControlerLayer():
         
         self.app = FastAPI()
         self.service = ServiceLayer()
-    
-        @self.app.get('/get_appointments')
-        def get_appointments(args: dict):
-            optmessage = DomainLayer.create_opt_message(args)
-            appointments = self.service.get_appointments(optmessage)
-            return appointments
 
         @self.app.post('/signup')
         def signup(args: dict):
             user = DomainLayer.create_signup(args)
             status = self.service.save_user(user)
+            self.service.post_medcard_info(user, MEDCARD_URL_PLACEHOLDER)
             return status
         
         @self.app.post('/login')
