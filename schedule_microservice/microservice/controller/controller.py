@@ -38,6 +38,5 @@ class ControlerLayer():
 
 
 if __name__ == '__main__':
-    # time.sleep(30)
     controller = ControlerLayer()
     uvicorn.run(controller.app, host='0.0.0.0', port=8080)

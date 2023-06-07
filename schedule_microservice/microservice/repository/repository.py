@@ -57,9 +57,9 @@ class RepositoryLayer:
 
     def save_timeslot(self, timeslot: Timeslot):
         # save timeslot to cassandra
-        sql = "INSERT INTO Timeslots (timeslot_id, doctor, date, availability) VALUES (%s, %s, %s, %s);"
+        sql = "INSERT INTO Timeslots (timeslot_id, doctor, date, availability) VALUES (?, ?, ?, ?);"
         try:
-            self.execute(sql, (str(timeslot.timeslot_id), str(timeslot.doctor), timeslot.date.strftime('%Y-%m-%d %H:%M:%S'), timeslot.availability))
+            self.execute(sql, (timeslot.timeslot_id, timeslot.doctor, timeslot.date.strftime('%Y-%m-%d %H:%M:%S'), timeslot.availability))
             return True
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -99,18 +99,13 @@ class RepositoryLayer:
         #     print(rows)
         #     return rows
         try:
-            print(self.execute_query('DESCRIBE TABLES;'))
             if columns == []:
-                rows = self.execute_query("SELECT * FROM Timeslots;")
-                print("ROWS")
-                print(pd.DataFrame(list(rows)))
-                return rows.all()
+                sql = f"SELECT * FROM Timeslots;"
+                rows = self.session.execute(sql)
+                return json.dumps(rows.all(), default=DomainLayer.convert_uuid_to_str)
             else:
-                print("IN ELSE")
-                print(self.session)
                 condition = " AND ".join(f"{col} = {values[idx]}" for idx, col in enumerate(columns))
                 sql = f"SELECT * FROM Timeslots WHERE {condition};"
-                print(sql)
                 rows = self.session.execute(sql)
                 return json.dumps(rows.all(), default=DomainLayer.convert_uuid_to_str)
         except NoHostAvailable:
@@ -120,11 +115,16 @@ class RepositoryLayer:
 
         return False
 
-    def delete_future_appointment(self, timeslot_id: UUID):
+    def delete_timeslot(self, timeslot_id: UUID):
         # delete from cassandra
         try:
-            self.execute("DELETE FROM Timeslots WHERE timeslot_id = %s", (timeslot_id))
-        except:
+            # sql = f"DELETE FROM Timeslots WHERE timeslot_id = %s;"
+            # prepared = self.session.prepare(sql)
+            # self.session.execute(prepared, timeslot_id)
+            print("AAAAAAAAAAAAAAA1")
+            self.execute("DELETE FROM Timeslots WHERE timeslot_id = ?", (DomainLayer.convert_str_to_uuid(timeslot_id),))
+        except Exception as e:
+            print(f"An error occurred: {e}")
             return False
         return True
 
