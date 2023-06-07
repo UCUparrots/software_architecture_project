@@ -17,14 +17,6 @@ class RepositoryLayer:
         self.host = host
         self.port = port
         self.connect_cassandra(keyspace="schedule")
-
-    # def connect_cassandra(self, keyspace=None):
-    #     cluster = Cluster([self.host], port=self.port)
-    #     if keyspace is None:
-    #         self.session = cluster.connect()
-    #     else:
-    #         self.session = cluster.connect(keyspace)
-    #         self.session.row_factory = ordered_dict_factory
     
     
     def connect_cassandra(self, keyspace=None, max_retries=100, retry_delay=5):
@@ -76,28 +68,12 @@ class RepositoryLayer:
         }
         filters = [optmessage.timeslot_id, optmessage.doctor, optmessage.date, optmessage.availability]
        
-        print(filters)
+        # print(filters)
         columns = [columns_mapping[filters.index(filter_col)] for filter_col in filters if filter_col is not None]
         values = [filter_col for filter_col in filters if filter_col is not None]
         
-        print(columns)
-        print(values)
-        # if columns == []:
-        #     try:
-        #         rows = self.execute("SELECT * FROM Timeslots;")
-        #         return rows
-        #     except:
-        #         return False
-            
-        # condition = [f"{col} = {values[idx]}" for idx, col in enumerate(columns)]
-        # condition = " AND ".join(condition)
-        # print(condition)
-
-        # sql = f"SELECT * FROM Timeslots WHERE {condition};"
-        # try:
-        #     rows = self.execute(sql)
-        #     print(rows)
-        #     return rows
+        # print(columns)
+        # print(values)
         try:
             if columns == []:
                 sql = f"SELECT * FROM Timeslots;"
@@ -118,10 +94,6 @@ class RepositoryLayer:
     def delete_timeslot(self, timeslot_id: UUID):
         # delete from cassandra
         try:
-            # sql = f"DELETE FROM Timeslots WHERE timeslot_id = %s;"
-            # prepared = self.session.prepare(sql)
-            # self.session.execute(prepared, timeslot_id)
-            print("AAAAAAAAAAAAAAA1")
             self.execute("DELETE FROM Timeslots WHERE timeslot_id = ?", (DomainLayer.convert_str_to_uuid(timeslot_id),))
         except Exception as e:
             print(f"An error occurred: {e}")

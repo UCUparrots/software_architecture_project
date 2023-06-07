@@ -27,8 +27,13 @@ class DomainLayer:
     def create_timeslots(self, data: dict):
         print("Start create timeslots")
         interval = pd.Timedelta(minutes=15)  # Define the desired interval
+        start_date = pd.to_datetime(data["start_date"])  # Convert start_date to Timestamp
+
+        # Round up the start_date to the next 15-minute interval
+        rounded_start_date = start_date if start_date.minute % 15 == 0 else (start_date + pd.Timedelta(minutes=15)).floor('15min')
+
         end_date = pd.to_datetime(data["end_date"]) - interval  # Subtract the interval from the end date
-        timestamps = pd.date_range(start=data["start_date"], end=end_date, freq=interval).tolist()
+        timestamps = pd.date_range(start=rounded_start_date, end=end_date, freq=interval).tolist()
         timeslots = []
 
         for timestamp in timestamps:
