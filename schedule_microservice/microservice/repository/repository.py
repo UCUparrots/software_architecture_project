@@ -94,6 +94,10 @@ class RepositoryLayer:
     def delete_timeslot(self, timeslot_id: UUID):
         # delete from cassandra
         try:
+            # TODO: call Vlad's microservice to check if there was appointment at that time and delete it if yes
+            # TODO: the same should be done in Vlad's microservice when appointment is deleted: 
+            # if it is done by patient (not called from here), 
+            # the timeslot for that appointment should be added back in schedules DB
             self.execute("DELETE FROM Timeslots WHERE timeslot_id = ?", (DomainLayer.convert_str_to_uuid(timeslot_id),))
         except Exception as e:
             print(f"An error occurred: {e}")
