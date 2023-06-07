@@ -1,11 +1,11 @@
-GET http://0.0.0.0:8080/form_medcard?uuid=1d0d1f8b-68b6-4c89-9761-950db9a4a6a2
+GET http://0.0.0.0:8080/form_medcard?uuid=10311f8b-68b6-4c89-9761-950db9a4a6a2
 ###
 
 POST http://0.0.0.0:8080/update_medcard
 Content-Type: application/json
 
 {
-  "patient_id": "1d0d1f8b-68b6-4c89-9761-950db9a4a6a2",
+  "patient_id": "10211f8b-68b6-4c89-9761-950db9a4a6a2",
   "doctor_id": "d8e2d68e-20c1-4e0d-b52e-8209ab07b5c8",
   "diagnosis_id": "2e4c874e-9361-4a76-bbaf-49f4ae5e7c09",
   "diagnosis": "aaaaa :((((((((",
@@ -23,5 +23,20 @@ Content-Type: application/json
 {
   "diagnosis_id": "2e4c874e-9361-4a76-bbaf-49f4ae5e7c09",
   "resolved_date": "2023-07-10 10:00:00"
+}
+###
+
+POST http://0.0.0.0:8080/add_user_to_medcard
+Content-Type: application/json
+
+{
+  "user_id": "10311f8b-68b6-4c89-9761-950db9a4a6a2",
+  "email": "custom@email.com",
+  "name": "Name",
+  "surname": "Surname",
+  "phone": "1234567890",
+  "birthdate": "2003-07-10",
+  "doctorPhD": "",
+  "doctor_specialization": ""
 }
 ###

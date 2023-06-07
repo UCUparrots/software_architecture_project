@@ -8,6 +8,7 @@ sys.path.append(ROOT_DIR)
 from service.service import CardService
 from domain.AppointmentNotes import AppointmentNotes
 from domain.RelevantUpdateData import RelevantData
+from domain.User import UserInfo
 
 
 
@@ -16,6 +17,10 @@ class CardController:
         @app.get("/form_medcard")
         async def get_patient_information(uuid: str):
             return CardService().form_medcard(uuid)
+
+        @app.post("/add_user_to_medcard")
+        async def add_user_to_medcard(user_info: UserInfo):
+            return CardService().add_user_to_db(user_info)
 
         @app.post("/update_medcard")
         async def update_medical_card(data: AppointmentNotes):
