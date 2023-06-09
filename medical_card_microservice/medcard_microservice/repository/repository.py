@@ -16,17 +16,42 @@ class Repository:
         self.cursor = self.connection.cursor()
 
     def add_user_info(self, user: UserInfo):
-        sql = f"""INSERT INTO UserTable (user_id, email, name, surname, phone, birthdate, doctorPhD, doctor_specialization)
-        VALUES
-            ('{user.user_id}', '{user.email}', '{user.name}','{user.surname}', '{user.phone}', '{user.birthdate}', '{user.doctorPhD}', '{user.doctor_specialization}');
-        """
-        try:
-            self.cursor.execute(sql)
-            self.connection.commit()
-            return True
-        except Exception as e:
-            logging.error(f"Error occurred during update: {str(e)}")
-            return False
+        sql = f"SELECT * FROM UserTable WHERE user_id='{user.user_id}';"
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        if len(result) > 0:
+            field_names = ['user_id', 'email', 'name', 'surname', 'phone', 'birthdate', 'doctorPhD', 'doctor_specialization']
+            current_values = [user.user_id, user.email, user.name, user.surname, user.phone, user.birthdate, user.doctorPhD, user.doctor_specialization]
+            update_values = result[0]
+
+            update_fields = []
+            for i, (current, updated) in enumerate(zip(current_values, update_values)):
+                if updated != current:
+                    update_fields.append(f"{field_names[i]}='{current}'")
+
+            print('update_fields', update_fields)
+            if update_fields:
+                sql = f"UPDATE UserTable SET {', '.join(update_fields)} WHERE user_id='{user.user_id}';"
+                try:
+                    self.cursor.execute(sql)
+                    self.connection.commit()
+                    return True
+                except Exception as e:
+                    logging.error(f"Error occurred during update: {str(e)}")
+
+        else:
+            sql = f"""INSERT INTO UserTable (user_id, email, name, surname, phone, birthdate, doctorPhD, doctor_specialization)
+            VALUES
+                ('{user.user_id}', '{user.email}', '{user.name}','{user.surname}', '{user.phone}', '{user.birthdate}', '{user.doctorPhD}', '{user.doctor_specialization}');
+            """
+
+            try:
+                self.cursor.execute(sql)
+                self.connection.commit()
+                return True
+            except Exception as e:
+                logging.error(f"Error occurred during update: {str(e)}")
+                return False
 
     def get_patient_appointments(self, patient_id) -> list:
         sql = f"SELECT * FROM DiagnosisHistory WHERE patient_id='{patient_id}';"
@@ -39,7 +64,7 @@ class Repository:
         self.cursor.execute(sql)
         result = self.cursor.fetchall()
         if not result:
-            uid, email, name, surname, phone, birthdate, phd, spec = [None for _ in range(8)]
+            return None
         else:
             uid, email, name, surname, phone, birthdate, phd, spec = result[0]
         info = {'name': name, 'surname': surname, 'phone': phone,

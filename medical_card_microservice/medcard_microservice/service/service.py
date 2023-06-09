@@ -22,6 +22,9 @@ class CardService:
         user = self.repository.get_patient_appointments(patient_uuid)
         apps = self.form_appointment_info(user)
         user_info = self.repository.get_user_info(patient_uuid)
+        if not user_info:
+            print('user onfo', user_info)
+            return None
 
         return vars(MedCardInfo(user_info['name'] + ' ' + user_info['surname'], user_info['email'],
                                 user_info['phone'], user_info['birthdate'], apps))
