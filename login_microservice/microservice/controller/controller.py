@@ -3,6 +3,7 @@ from fastapi import FastAPI
 import sys
 import os
 import time
+from uuid import UUID
 sys.path.append('./opt/app/domain')
 sys.path.append('./opt/app/service')
 
