@@ -24,6 +24,6 @@ VALUES
 INSERT INTO FutureAppointments (appointment_id, doctor_id, patient_id, type, date)
 VALUES
     ('a0869c06-6a85-482e-b93a-6be9a5f16c7a', '4aebdbe2-8a82-4e96-9760-7e8e0d3f79e0', 'c3d6c8a4-68d5-4eab-963c-257df866a0d4', 1, '2023-05-19 19:00:00'),
-    ('35c2e0ff-30d3-4e0a-88f4-79f68c377d86', 'a34e21f9-93fd-4e4c-9c3f-fb6c64f28b25', 'e7d9c0b8-71c5-4e3e-9f81-9f038011d4b0', 2, '2023-05-20 11:55:00'),
+    ('35c2e0ff-30d3-4e0a-88f4-79f68c377d86', 'a34e21f9-93fd-4e4c-9c3f-fb6c64f28b25', 'e7d9c0b8-71c5-4e3e-9f81-9f038011d4b0', 2, '2023-05-20 11:45:00'),
     ('4afdd1f9-ced1-4a8a-b614-6a8edfc21b32', '68e4bcf5-82fb-47d2-9c28-58d751f1085d', 'fd4db558-1e10-4a9e-912f-7e4b9db14de7', 3, '2023-06-22 14:00:00'),
     ('8a3d1c9e-6d32-4d21-b3c2-9f3b774a8b03', 'a34e21f9-93fd-4e4c-9c3f-fb6c64f28b25', 'fd4db558-1e10-4a9e-912f-7e4b9db14de7', 1, '2023-06-20 16:30:00')
