@@ -5,9 +5,6 @@ from domain import DomainLayer
 from uuid import UUID
 import psycopg2
 import time
-from cassandra.cluster import Cluster
-from cassandra.cluster import NoHostAvailable
-from cassandra.query import ordered_dict_factory
 import requests
 import pandas as pd
 import json
@@ -19,11 +16,6 @@ class RepositoryLayer:
         self.connection = psycopg2.connect(database='test_db', user='postgres', 
                         password='postgres', host='postgres-1')
         self.cursor = self.connection.cursor()
-    #     self.session = None # for Cassandra
-
-    # def execute(self, query, row):
-    #     prepared = self.session.prepare(query)
-    #     self.session.execute(prepared, row)
 
     def delete_timeslot(self, appointment: Appointment):
         app_doctor_id = appointment.doctor
@@ -222,27 +214,3 @@ class RepositoryLayer:
             except:
                 return False
         return False
-    
-
-    def connect_cassandra(self, keyspace=None, max_retries=100, retry_delay=5):
-        host='cassandra-node'
-        port=9042
-        retry_count = 0
-        while retry_count < max_retries and not self.session:
-            try:
-                cluster = Cluster([host], port=port)
-                if keyspace is None:
-                    session = cluster.connect()
-                else:
-                    session = cluster.connect(keyspace, wait_for_all_pools=True)
-                    session.row_factory = ordered_dict_factory
-                    session.execute('USE schedule')
-                print("Successful connection!")
-            except Exception as e:
-                print(f"Failed to connect to Cassandra: {str(e)}")
-                print("Retrying connection...")
-                retry_count += 1
-                time.sleep(retry_delay)
-
-        if retry_count == max_retries:
-            print("Failed to connect to Cassandra after multiple retries. Exiting...")
