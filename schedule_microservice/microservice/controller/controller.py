@@ -20,7 +20,6 @@ class ControlerLayer():
         @self.app.post('/new_timeslots')
         def new_timeslots(args: dict):
             timeslots = DomainLayer().create_timeslots(args)
-            print(timeslots)
             status = self.service.new_timeslots(timeslots)
             return status
         
@@ -39,4 +38,4 @@ class ControlerLayer():
 
 if __name__ == '__main__':
     controller = ControlerLayer()
-    uvicorn.run(controller.app, host='0.0.0.0', port=8080)
+    uvicorn.run(controller.app, host='0.0.0.0', port=8081)

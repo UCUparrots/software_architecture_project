@@ -20,16 +20,12 @@ class RepositoryLayer:
     def delete_timeslot(self, appointment: Appointment):
         app_doctor_id = appointment.doctor
         app_date = appointment.date.strftime('%Y-%m-%d %H:%M:%S')
-        schedule_url = "http://scheduleService:8080/get_timeslots"
+        schedule_url = "http://scheduleService:8081/get_timeslots"
         get_json = {"doctor": str(app_doctor_id), "date": str(app_date)}
         try:
             response = requests.get(url=schedule_url, json=get_json).json()
             response_data = json.loads(response.strip())
             response_2 = json.loads(response_data)
-            # print("get", response_2)
-            # print(type(response_2))
-            # print(response_2[0])
-            # print(response_2[0]["timeslot_id"])
         except Exception as e:
             print(f"Failed to get from Timeslots: {str(e)}")
             return False
@@ -39,7 +35,7 @@ class RepositoryLayer:
             return False
         timeslot_id = response_2[0]["timeslot_id"]
         # print(timeslot_id)
-        schedule_url = "http://scheduleService:8080/delete_timeslot"
+        schedule_url = "http://scheduleService:8081/delete_timeslot"
         post_json = {"timeslot_id": str(timeslot_id)}
         try:
             response = requests.post(url=schedule_url, json=post_json)
@@ -156,7 +152,7 @@ class RepositoryLayer:
             app_doctor_id = appointment[1]
             app_start_date = appointment[4]
             app_end_date = app_start_date + pd.Timedelta(minutes=15)
-            schedule_url = "http://scheduleService:8080/new_timeslots"
+            schedule_url = "http://scheduleService:8081/new_timeslots"
             post_json = {"doctor": app_doctor_id, "start_date": str(app_start_date), "end_date": str(app_end_date)}
             try:
                 response = requests.post(url=schedule_url, json=post_json)
