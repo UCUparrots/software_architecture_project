@@ -22,8 +22,8 @@ class ControlerLayer():
         self.kafka_adress = 'kafka-server'
         self.kafka_port = 9092
         
-        self.consumer = KafkaConsumer('patient_email', bootstrap_servers=f'{self.kafka_adress}:{self.kafka_port}', value_deserializer=lambda m: json.loads(m.decode('utf-8')))
-        # self.consumer = KafkaConsumer('patient_email', bootstrap_servers=f'{self.kafka_adress}:{self.kafka_port}', value_deserializer=lambda m: m.decode('utf-8'))
+        # self.consumer = KafkaConsumer('patient_email', bootstrap_servers=f'{self.kafka_adress}:{self.kafka_port}', value_deserializer=lambda m: json.loads(m.decode('utf-8')))
+        self.consumer = KafkaConsumer('patient_email', bootstrap_servers=f'{self.kafka_adress}:{self.kafka_port}', value_deserializer=lambda m: m.decode('utf-8'))
         consumer_thread = threading.Thread(target=self.read_mq)
         consumer_thread.start()
     
