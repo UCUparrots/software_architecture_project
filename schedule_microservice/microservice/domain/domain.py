@@ -2,6 +2,7 @@ from domain_objects import Timeslot, Message, OptMessage
 from uuid import uuid4
 import pandas as pd
 from uuid import UUID
+import datetime
 
 
 class DomainLayer:
@@ -53,6 +54,14 @@ class DomainLayer:
     def convert_uuid_to_str(item):
         if isinstance(item, UUID):
             return str(item)
+        return item
+    
+    @staticmethod
+    def convert_to_str(item):
+        if isinstance(item, datetime.datetime):
+            return item.strftime("'%Y-%m-%d %H:%M:%S'")
+        if not isinstance(item, UUID):
+            return f'{item}'
         return item
     
     @staticmethod

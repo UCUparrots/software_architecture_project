@@ -9,6 +9,8 @@ from cassandra.cluster import NoHostAvailable
 from cassandra.query import ordered_dict_factory
 import time
 import json
+import psycopg2
+
 
 
 class RepositoryLayer:
@@ -17,6 +19,9 @@ class RepositoryLayer:
         self.host = host
         self.port = port
         self.connect_cassandra(keyspace="schedule")
+        # self.connection = psycopg2.connect(database='test_db', user='postgres', 
+        #                 password='postgres', host='postgres-1')
+        # self.cursor = self.connection.cursor()
     
     
     def connect_cassandra(self, keyspace=None, max_retries=100, retry_delay=5):
@@ -72,32 +77,71 @@ class RepositoryLayer:
         columns = [columns_mapping[filters.index(filter_col)] for filter_col in filters if filter_col is not None]
         values = [filter_col for filter_col in filters if filter_col is not None]
         
-        # print(columns)
-        # print(values)
+        print(columns)
+        print(values)
         try:
             if columns == []:
                 sql = f"SELECT * FROM Timeslots;"
                 rows = self.session.execute(sql)
-                return json.dumps(rows.all(), default=DomainLayer.convert_uuid_to_str)
+                print(rows)
+                result = rows.all()
+                print(result)
+                return json.dumps(result, default=DomainLayer.convert_uuid_to_str)
             else:
-                condition = " AND ".join(f"{col} = {values[idx]}" for idx, col in enumerate(columns))
-                sql = f"SELECT * FROM Timeslots WHERE {condition};"
+                # condition = "doctor = 7aebdbe2-8a82-4e96-9760-7e8e0d3f79e0 AND date = '2023-05-19 19:45:00'"
+                condition = " AND ".join(f"{col} = {DomainLayer.convert_to_str(values[idx])}" for idx, col in enumerate(columns))
+                print(condition)
+                sql = f"SELECT * FROM Timeslots WHERE {condition} ALLOW FILTERING;"
                 rows = self.session.execute(sql)
-                return json.dumps(rows.all(), default=DomainLayer.convert_uuid_to_str)
+                result = rows.all()
+                print(result)
+                return json.dumps(result, default=DomainLayer.convert_uuid_to_str)
         except NoHostAvailable:
             print("Unable to connect to Cassandra. Check Cassandra service status.")
         except Exception as e:
             print(f"An error occurred: {e}")
 
         return False
+    
+    def check_exesting_appointment(self, timeslot_id: UUID):
+        connection = psycopg2.connect(database='test_db', user='postgres', 
+                        password='postgres', host='postgres-1')
+        cursor = connection.cursor()
+
+        sql = f"SELECT * FROM Timeslots WHERE timeslot_id = {DomainLayer.convert_str_to_uuid(timeslot_id)};"
+        rows = self.session.execute(sql)
+        timeslot_info = rows.all()[0]
+        timeslot_date = timeslot_info["date"]
+        timeslot_doctor = timeslot_info["doctor"]
+        print(timeslot_date, timeslot_doctor)
+        condition = f"doctor_id = '{DomainLayer.convert_uuid_to_str(timeslot_doctor)}' AND date = '{timeslot_date}'"
+
+        print(condition)
+        sql = f"SELECT * FROM PastAppointments WHERE {condition}"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        print(result)
+        if result: # not empty, there is such appointment
+            # should cancel appointment
+            appointment = result[0][0]
+            print(appointment)
+            try:
+                cursor.execute("DELETE FROM PastAppointments WHERE appointment_id = %s", (appointment,))
+                connection.commit()
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                return False
+            return True
+        return True
+
 
     def delete_timeslot(self, timeslot_id: UUID):
         # delete from cassandra
         try:
-            # TODO: call Vlad's microservice to check if there was appointment at that time and delete it if yes
             # TODO: the same should be done in Vlad's microservice when appointment is deleted: 
             # if it is done by patient (not called from here), 
             # the timeslot for that appointment should be added back in schedules DB
+            self.check_exesting_appointment(timeslot_id)
             self.execute("DELETE FROM Timeslots WHERE timeslot_id = ?", (DomainLayer.convert_str_to_uuid(timeslot_id),))
         except Exception as e:
             print(f"An error occurred: {e}")
