@@ -5,24 +5,60 @@ import { MdEdit } from 'react-icons/md';
 import Image from 'next/image';
 import { MyContext } from '@/AppStateProvider';
 import Link from 'next/link';
+import { Alert, AlertTitle } from '@mui/material';
+import axios from 'axios';
 
-function UserInfo({ id, name, residence, phone, date, email }) {
-	const { isDoctor } = useContext(MyContext);
+function UserInfo({ id, name, phone, date, email }) {
+	const { isDoctor, userId } = useContext(MyContext);
 	const [showForm, setShowForm] = useState(false);
+	const [showWarning, setShowWarning] = useState(false);
 
 	const [emailVal, setEmailVal] = useState(email);
 	const [dateVal, setDateVal] = useState(date);
-	const [residenceVal, setResidenceVal] = useState(residence);
 	const [phoneVal, setPhoneVal] = useState(phone);
+
+	const handleShowWarning = () => {
+		setShowWarning(true);
+	};
+
+	const handleCloseWarning = () => {
+		setShowWarning(false);
+	};
 
 	const inputStyle = {
 		color: '#8E8F94',
 		borderRadius: '10px',
 	};
 
+	const handleChangeData = async (event) => {
+		event.preventDefault();
+		const url = '/loginS/update_info';
+		if (emailVal.length == 0 || dateVal.length == 0 || phoneVal.length == 0) {
+			handleShowWarning();
+		} else {
+			const data = {
+				user_id: id,
+				email: emailVal,
+				phone: phoneVal,
+				birthdate: dateVal,
+			};
+			const headers = {
+				'Content-Type': 'application/json',
+			};
+
+			try {
+				const response = await axios.post(url, data, { headers });
+				console.log(response.data);
+			} catch (error) {
+				console.error(error);
+			}
+			setShowForm(!showForm);
+		}
+	};
+
 	return (
 		<div
-			className='bg-[#fff] rounded-3xl drop-shadow-lg w-[30vw] h-[50vh]
+			className='bg-[#fff] rounded-3xl drop-shadow-lg w-[40vw] h-[50vh]
          py-7 px-10 flex flex-col justify-between'
 		>
 			<div className='flex flex-row'>
@@ -49,29 +85,23 @@ function UserInfo({ id, name, residence, phone, date, email }) {
 							</button>
 						)}
 					</div>
+					{showWarning && (
+						<Alert severity='error' onClose={handleCloseWarning}>
+							<AlertTitle>Error</AlertTitle>
+							Input all fields
+						</Alert>
+					)}
 				</div>
 			</div>
 
 			<div>
 				{showForm ? (
-					<form className='h-[220px] flex flex-col pb-10'>
+					<form
+						className='h-[220px] flex flex-col pb-10'
+						onSubmit={handleChangeData}
+					>
 						<div className='flex justify-between'>
 							<div>
-								<div>
-									<div className='text-dark-gray text-[19px] pb-3'>
-										Residence
-									</div>
-									<div className='text-[14px] w-[15vw] pb-[51px]'>
-										<TextField
-											id='outlined-basic'
-											size='small'
-											value={residenceVal}
-											style={inputStyle}
-											onChange={(e) => setResidenceVal(e.target.value)}
-											variant='outlined'
-										/>
-									</div>
-								</div>
 								<div>
 									<div className='text-dark-gray text-[19px] pb-3'>
 										Phone number
@@ -82,6 +112,18 @@ function UserInfo({ id, name, residence, phone, date, email }) {
 											size='small'
 											value={phoneVal}
 											onChange={(e) => setPhoneVal(e.target.value)}
+											variant='outlined'
+										/>
+									</div>
+								</div>
+								<div>
+									<div className='text-dark-gray text-[19px] pb-3'>Email</div>
+									<div className='text-[14px] w-[15vw] pb-3'>
+										<TextField
+											id='outlined-basic'
+											size='small'
+											value={emailVal}
+											onChange={(e) => setEmailVal(e.target.value)}
 											variant='outlined'
 										/>
 									</div>
@@ -102,24 +144,11 @@ function UserInfo({ id, name, residence, phone, date, email }) {
 										/>
 									</div>
 								</div>
-								<div>
-									<div className='text-dark-gray text-[19px] pb-3'>Email</div>
-									<div className='text-[14px] w-[15vw] pb-3'>
-										<TextField
-											id='outlined-basic'
-											size='small'
-											value={emailVal}
-											onChange={(e) => setEmailVal(e.target.value)}
-											variant='outlined'
-										/>
-									</div>
-								</div>
 							</div>
 						</div>
 						<div className='flex justify-end'>
 							<button
 								type='submit'
-								onClick={() => setShowForm((prevCheck) => !prevCheck)}
 								className='bg-primary hover:bg-primary-dark text-white font-bold py-2 px-[20px] rounded-lg'
 							>
 								Submit
@@ -134,16 +163,14 @@ function UserInfo({ id, name, residence, phone, date, email }) {
 							</div> */}
 						<div>
 							<div>
-								<div className='text-dark-gray text-[19px] pb-3'>Residence</div>
-								<div className='text-[14px] w-[15vw] pb-[70px]'>
-									{residenceVal}
-								</div>
-							</div>
-							<div>
 								<div className='text-dark-gray text-[19px] pb-3'>
 									Phone number
 								</div>
 								<div className='text-[14px] w-[15vw] pb-[70px]'>{phoneVal}</div>
+							</div>
+							<div>
+								<div className='text-dark-gray text-[19px] pb-3'>Email</div>
+								<div className='text-[14px] w-[15vw] pb-[70px]'>{emailVal}</div>
 							</div>
 						</div>
 						<div>
@@ -152,10 +179,6 @@ function UserInfo({ id, name, residence, phone, date, email }) {
 									Date Of Birth
 								</div>
 								<div className='text-[14px] w-[15vw] pb-[70px]'>{dateVal}</div>
-							</div>
-							<div>
-								<div className='text-dark-gray text-[19px] pb-3'>Email</div>
-								<div className='text-[14px] w-[15vw] pb-[70px]'>{emailVal}</div>
 							</div>
 						</div>
 					</div>

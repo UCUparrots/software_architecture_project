@@ -1,27 +1,65 @@
 import React, { useState } from 'react';
 import { Rating, TextField } from '@mui/material';
 import { FaStar, FaRegStar } from 'react-icons/fa';
-import { RiFolderUserLine } from 'react-icons/ri';
 import { MdEdit } from 'react-icons/md';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useContext } from 'react';
+import { MyContext } from '@/AppStateProvider';
+import { Alert, AlertTitle } from '@mui/material';
+import axios from 'axios';
 
-function DoctorInfo({
-	name,
-	descr,
-	about,
-	specialization,
-	phone,
-	date,
-	email,
-	rate,
-}) {
+function DoctorInfo({ name, descr, specialization, phone, date, email, rate }) {
 	const [showForm, setShowForm] = useState(false);
+	const [showWarning, setShowWarning] = useState(false);
+
 	const [emailVal, setEmailVal] = useState(email);
-	const [aboutVal, setAboutVal] = useState(about);
 	const [dateVal, setDateVal] = useState(date);
 	const [specializationVal, setSpecializationVal] = useState(specialization);
 	const [phoneVal, setPhoneVal] = useState(phone);
+	const [descrVal, setDescrVal] = useState(descr);
+	const { userId } = useContext(MyContext);
+
+	const handleShowWarning = () => {
+		setShowWarning(true);
+	};
+
+	const handleCloseWarning = () => {
+		setShowWarning(false);
+	};
+
+	const handleChangeData = async (event) => {
+		event.preventDefault();
+		const url = '/loginS/update_info';
+		if (
+			emailVal.length == 0 ||
+			dateVal.length == 0 ||
+			phoneVal.length == 0 ||
+			specializationVal.length == 0 ||
+			descrVal.length == 0
+		) {
+			handleShowWarning();
+		} else {
+			const data = {
+				user_id: userId,
+				email: emailVal,
+				phone: phoneVal,
+				birthdate: dateVal,
+				doctor_specialization: specializationVal,
+				doctor_phd: descrVal,
+			};
+			const headers = {
+				'Content-Type': 'application/json',
+			};
+
+			try {
+				const response = await axios.post(url, data, { headers });
+				console.log(response.data);
+			} catch (error) {
+				console.error(error);
+			}
+			setShowForm(!showForm);
+		}
+	};
 
 	return (
 		<div
@@ -40,7 +78,6 @@ function DoctorInfo({
 					<div className='flex flex-row justify-between w-full'>
 						<div>
 							<div className='text-[23px] font-medium text-primary'>{name}</div>
-							<div className='text-[12px] text-dark-gray'>{descr}</div>
 						</div>
 						{showForm ? (
 							<></>
@@ -53,19 +90,30 @@ function DoctorInfo({
 							</button>
 						)}
 					</div>
+					{showWarning && (
+						<Alert severity='error' onClose={handleCloseWarning}>
+							<AlertTitle>Error</AlertTitle>
+							Input all fields
+						</Alert>
+					)}
 
 					{showForm ? (
-						<form className='h-[220px] flex flex-col py-10'>
+						<form
+							className='h-[220px] flex flex-col py-10'
+							onSubmit={handleChangeData}
+						>
 							<div className='flex justify-between'>
 								<div>
-									<div className='text-dark-gray text-[19px] pb-3'>About</div>
+									<div className='text-dark-gray text-[19px] pb-3'>
+										Doctor`s phd
+									</div>
 									<div className='text-[14px] w-[15vw] pb-[51px]'>
 										<TextField
-											multiline
-											rows={6}
-											maxRows={7}
-											value={aboutVal}
-											onChange={(e) => setAboutVal(e.target.value)}
+											id='outlined-basic'
+											size='small'
+											value={descrVal}
+											onChange={(e) => setDescrVal(e.target.value)}
+											variant='outlined'
 										/>
 									</div>
 								</div>
@@ -131,7 +179,6 @@ function DoctorInfo({
 							<div className='flex justify-end'>
 								<button
 									type='submit'
-									onClick={() => setShowForm((prevCheck) => !prevCheck)}
 									className='bg-primary hover:bg-primary-dark text-white font-bold py-4 px-[70px] rounded-lg'
 								>
 									Submit
@@ -141,8 +188,10 @@ function DoctorInfo({
 					) : (
 						<div className='h-[220px] flex justify-between py-10'>
 							<div>
-								<div className='text-dark-gray text-[19px] pb-3'>About</div>
-								<div className='text-[14px] w-[15vw] pb-[70px]'>{aboutVal}</div>
+								<div className='text-dark-gray text-[19px] pb-3'>
+									Doctor`s phd
+								</div>
+								<div className='text-[14px] w-[15vw] pb-[70px]'>{descrVal}</div>
 							</div>
 							<div>
 								<div>

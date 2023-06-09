@@ -1,6 +1,5 @@
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import styled from 'styled-components';
 import Select from 'react-select';
 import { clsx } from 'clsx';
 import { useState } from 'react';
