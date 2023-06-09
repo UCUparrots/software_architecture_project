@@ -7,32 +7,58 @@ import psycopg2
 import bcrypt
 from datetime import datetime
 import psycopg2.extras
+import json
+import requests
 
 
 
 class RepositoryLayer:
     def __init__(self):
         self.connection = psycopg2.connect(database='test_user_db', user='postgres', 
-                        password='postgres', host='postgres-2')
+                        password='postgres', host='postgres-1')
         self.cursor = self.connection.cursor()
         psycopg2.extras.register_uuid()
     
     def save_user(self, user: SignUp):
         # save user to rdbms
-        sql = "INSERT INTO users (user_id, email, password_hash, firstname, surname, phone, birthdate, is_doctor) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
+        sql = "INSERT INTO users (user_id, email, password_hash, firstname, surname, phone, birthdate, is_doctor, notification) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);"
 
         try:
             salt = bcrypt.gensalt()
   
             # Hashing the password
             hash = bcrypt.hashpw(user.password_hash.encode("utf-8"), salt)
+        
+            if user.notification is None:
+                user.notification = True
+                
             self.cursor.execute(sql, (str(user.user_id), str(user.email), str(hash), str(user.firstname), 
-                                str(user.lastname), str(user.phone), str(user.birthdate), str(user.is_doctor)))
+                                str(user.lastname), str(user.phone), str(user.birthdate), str(user.is_doctor), str(user.notification)))
             self.connection.commit()
             return user.user_id
         except Exception as e:
             print(e)
             return ""
+        
+
+    def post_to_medcard(self, user: SignUp , url: str):
+        data = json.dumps( {
+            "user_id": str(user.user_id),
+            "email": str(user.email),
+            "firstname": str(user.firstname),
+            "lastname": str(user.lastname),
+            "phone": str(user.phone),
+            "birthdate": str(user.birthdate),
+            "is_doctor": str(user.is_doctor),
+            "doctor_phd": str(user.doctor_phd),
+            "doctor_specialization": str(user.doctor_specialization)
+        })
+
+
+        try:
+            r = requests.post(url = url, data = data)
+        except Exception as e:
+            print(e)
     
 
     def check_user_existence(self, user_info: Union[SignUp, LogIn]):
@@ -90,6 +116,25 @@ class RepositoryLayer:
             print(e)
             return False
         return True
+    
+    def post_update_to_medcard(self, user: UserInfoUpdate , url: str):
+
+        data = json.dumps( {
+            "user_id": str(user.user_id),
+            "email": str(user.email),
+            "firstname": str(None),
+            "lastname": str(None),
+            "phone": str(user.phone),
+            "birthdate": str(user.birthdate),
+            "is_doctor": str(user.is_doctor),
+            "doctor_phd": str(user.doctor_phd),
+            "doctor_specialization": str(user.doctor_specialization)
+        })    
+
+        try:
+            r = requests.post(url = url, data = data)
+        except Exception as e:
+            print(e)
 
     def get_user_info(self, user_id: UserID):
         sql = "SELECT * FROM users WHERE user_id = %s;"

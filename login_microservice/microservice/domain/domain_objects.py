@@ -15,7 +15,7 @@ class SignUp(BaseModel):
     phone: str
     birthdate: date
     is_doctor: bool
-    notification: Optional[bool]
+    notification: bool
     doctor_phd: Optional[str]
     doctor_specialization: Optional[str]
 
@@ -30,7 +30,6 @@ class UserInfoUpdate(BaseModel):
     phone: str
     birthdate: date
     is_doctor: bool
-    notification: bool
     doctor_phd: Optional[str]
     doctor_specialization: Optional[str]
 

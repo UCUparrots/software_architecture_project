@@ -20,12 +20,18 @@ class ServiceLayer:
         if self.repository.check_user_existence(signup):
             return ""
         return self.repository.save_user(signup)
+    
+    def post_medcard_info(self, user: SignUp, url: str):
+        self.repository.post_to_medcard(user, url)
 
     def authenticate_user(self, login: LogIn):
         return self.repository.authenticate_user(login)
     
     def update_user(self, user_info: UserInfoUpdate):
         return self.repository.update_user(user_info)
+    
+    def post_update_to_medcard(self, user: UserInfoUpdate, url: str):
+        return self.repository.post_update_to_medcard(user, url)
 
     def get_user_info(self, user_info: UserID):
         return json.dumps(self.repository.get_user_info(user_info))

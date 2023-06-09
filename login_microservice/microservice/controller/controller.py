@@ -10,6 +10,7 @@ from domain_objects import SignUp, LogIn, UserInfoUpdate
 from domain import DomainLayer
 from service import ServiceLayer
 
+MEDCARD_URL_PLACEHOLDER = "http://localhost:8081/"
 
 
 class ControlerLayer():
@@ -17,17 +18,12 @@ class ControlerLayer():
         
         self.app = FastAPI()
         self.service = ServiceLayer()
-    
-        @self.app.get('/get_appointments')
-        def get_appointments(args: dict):
-            optmessage = DomainLayer.create_opt_message(args)
-            appointments = self.service.get_appointments(optmessage)
-            return appointments
 
         @self.app.post('/signup')
         def signup(args: dict):
             user = DomainLayer.create_signup(args)
             status = self.service.save_user(user)
+            self.service.post_medcard_info(user, MEDCARD_URL_PLACEHOLDER)
             return status
         
         @self.app.post('/login')
@@ -40,6 +36,7 @@ class ControlerLayer():
         def update_user(args: dict):
             user = DomainLayer.create_user_update_info(args)
             status = self.service.update_user(user)
+            self.service.post_update_to_medcard(user, MEDCARD_URL_PLACEHOLDER)
             return status
         
         @self.app.get('/get_info')
@@ -53,4 +50,4 @@ class ControlerLayer():
 if __name__ == '__main__':
     time.sleep(10)
     controller = ControlerLayer()
-    uvicorn.run(controller.app, host='0.0.0.0', port=8086)
+    uvicorn.run(controller.app, host='0.0.0.0', port=8080)
