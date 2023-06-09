@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from uuid import UUID
 import pandas as pd
-from typing import Optional
+from typing import Union
 import json
 from datetime import date
 
@@ -16,8 +16,8 @@ class SignUp(BaseModel):
     birthdate: date
     is_doctor: bool
     notification: bool
-    doctor_phd: Optional[str]
-    doctor_specialization: Optional[str]
+    doctor_phd:  Union[str, None] = None
+    doctor_specialization:  Union[str, None] = None
 
 class LogIn(BaseModel):
     email: str
@@ -26,12 +26,12 @@ class LogIn(BaseModel):
 
 class UserInfoUpdate(BaseModel):
     user_id: UUID
-    email: str
-    phone: str
-    birthdate: date
-    is_doctor: bool
-    doctor_phd: Optional[str]
-    doctor_specialization: Optional[str]
+    email:  Union[str, None] = None
+    phone:  Union[str, None] = None
+    birthdate: Union[date, None] = None
+    is_doctor: Union[bool, None] = None
+    doctor_phd:  Union[str, None] = None
+    doctor_specialization:  Union[str, None] = None
 
 class UserID(BaseModel):
     user_id: UUID
