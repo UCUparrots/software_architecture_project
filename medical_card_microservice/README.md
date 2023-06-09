@@ -4,6 +4,7 @@ Examples of GET/POST requests are in the `requests.http` file. I will attach the
 
 
 Add user information to the service table:
+* if you want to update user info you need to send the same object with all necessary updated information. this should be done by logging service. 
 ```
 POST http://0.0.0.0:8080/add_user_to_medcard
 Content-Type: application/json
