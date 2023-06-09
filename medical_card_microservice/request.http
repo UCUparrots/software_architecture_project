@@ -1,4 +1,4 @@
-GET http://0.0.0.0:8080/form_medcard?uuid=10311f8b-68b6-4c89-9761-950db9a4a6a2
+GET http://0.0.0.0:8080/form_medcard?uuid=10311f8b-68b6-4c89-9761-950db9a4a6a4
 ###
 
 POST http://0.0.0.0:8080/update_medcard
@@ -30,13 +30,28 @@ POST http://0.0.0.0:8080/add_user_to_medcard
 Content-Type: application/json
 
 {
-  "user_id": "10311f8b-68b6-4c89-9761-950db9a4a6a2",
+  "user_id": "10311f8b-68b6-4c89-9761-950db9a4a6a4",
   "email": "custom@email.com",
-  "name": "Name",
+  "name": "",
   "surname": "Surname",
-  "phone": "1234567890",
+  "phone": "1234590",
   "birthdate": "2003-07-10",
   "doctorPhD": "",
+  "doctor_specialization": ""
+}
+###
+
+POST http://0.0.0.0:8080/add_user_to_medcard
+Content-Type: application/json
+
+{
+  "user_id": "10311f8b-68b6-4c89-9761-950db9a4a6a4",
+  "email": "custom@email.com",
+  "name": "Updated Name",
+  "surname": "Surname",
+  "phone": "12345another phone90",
+  "birthdate": "2003-07-10",
+  "doctorPhD": "Doctor PhD now",
   "doctor_specialization": ""
 }
 ###
