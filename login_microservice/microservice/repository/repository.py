@@ -54,7 +54,6 @@ class RepositoryLayer:
             "doctor_specialization": str(user.doctor_specialization)
         })
 
-        print(user.doctor_phd)
 
         try:
             r = requests.post(url = url, data = data)
@@ -130,9 +129,7 @@ class RepositoryLayer:
             "is_doctor": str(user.is_doctor),
             "doctor_phd": str(user.doctor_phd),
             "doctor_specialization": str(user.doctor_specialization)
-        })
-
-        
+        })    
 
         try:
             r = requests.post(url = url, data = data)
