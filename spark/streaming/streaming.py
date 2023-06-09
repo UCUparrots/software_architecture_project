@@ -132,9 +132,9 @@ def main(spark):
 
     df = df.select(from_json(col("value").cast("string"), schema).alias("parsed_value"))
     
-    # Select the "id" field
+    
     df = df.select(col("parsed_value.doctor").alias("value"))
-    # doctor_info = get_doctor_info(df)
+    
 
     query = df.writeStream \
             .format("kafka") \

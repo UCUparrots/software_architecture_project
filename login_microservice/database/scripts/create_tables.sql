@@ -14,5 +14,5 @@ CREATE TABLE users (
 
 INSERT INTO users (user_id, email, password_hash, firstname, surname, phone, birthdate, is_doctor, notification)
 VALUES
-    ('fe150f8b-3866-4544-8921-d70dde8596e0', 'vlprotsenko333@gmail.com', 'superhash', 'Max', 'Verstappen', '12345', '1984-05-10', True, True);
-    ('c3083920-af10-4f27-8814-7486ab1ad590', 'vlpsenko333@gmail.com', 'superhash', 'Max', 'Verstappen', '12345', '1954-05-10', True, False);
+    ('4aebdbe2-8a82-4e96-9760-7e8e0d3f79e0', 'vlprotsenko333@gmail.com', 'superhash', 'Max', 'Verstappen', '12345', '1984-05-10', True, True);
+    ('b0869c06-6a85-482e-b93a-6be9a5f16c7a', 'vlpsenko333@gmail.com', 'superhash', 'Max', 'Verstappen', '12345', '1954-05-10', True, False);

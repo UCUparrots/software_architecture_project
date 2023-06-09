@@ -1,14 +1,19 @@
 from uuid import uuid4
+from domain_objects import Message, Email
 class DomainLayer:
 
     def __init__(self):
         pass
 
-    # @staticmethod
-    # def create_message(json: dict):
-    #     message = Message.parse_obj(json)
-    #     return message
+    @staticmethod
+    def create_message(json: dict):
+        message = Message.parse_obj(json)
+        return message
 
+    @staticmethod
+    def create_email(json: dict):
+        email = Email.parse_obj(json)
+        return email
     # @staticmethod
     # def create_opt_message(json: dict):
     #     opt = OptMessage.parse_obj(json)

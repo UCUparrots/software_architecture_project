@@ -31,7 +31,7 @@ class RepositoryLayer:
             return False
         
         if len(response_2) != 1:
-            print(f"There should be one timeslot for such appointment, insted {len(response)} were found")
+            print(f"There should be one timeslot for such appointment, instead {len(response)} were found")
             return False
         timeslot_id = response_2[0]["timeslot_id"]
         # print(timeslot_id)

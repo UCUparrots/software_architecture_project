@@ -30,9 +30,9 @@ class ControlerLayer():
         
     def read_mq(self):
         for message in self.consumer:
-            # raise(ChildProcessError)
             print(message.value)
-            self.service.add_message(message.value)
+            message = DomainLayer.create_message({'id': message.value})
+            self.service.add_message(message)
     
 
 

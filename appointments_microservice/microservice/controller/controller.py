@@ -51,9 +51,11 @@ class ControlerLayer():
         @self.app.post('/new_appointment')
         def new_appointment(args: dict):
             appointment = DomainLayer.create_appointment(args)
-            future = self.producer.send('doctor_alert', json.dumps(appointment, cls=CustomEncoder).encode("utf-8"))
-            result = future.get(timeout=60)
+            
             status = self.service.create_appointment(appointment)
+            if status:
+                future = self.producer.send('doctor_alert', json.dumps(appointment, cls=CustomEncoder).encode("utf-8"))
+                result = future.get(timeout=60)
             return status
         
         @self.app.post('/delete_appointment')
