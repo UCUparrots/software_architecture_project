@@ -4,6 +4,8 @@ services:
   login-service:
     build: ./microservice
     container_name: loginService
+    depends_on:
+      - postgres-1
     environment:
       - APP_PORT=8080
       - APP_NAME=loginService
