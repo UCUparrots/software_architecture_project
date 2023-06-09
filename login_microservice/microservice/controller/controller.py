@@ -40,8 +40,8 @@ class ControlerLayer():
             return status
         
         @self.app.get('/get_info')
-        def update_user(args: dict):
-            user = DomainLayer.create_user_id_info(args)
+        def get_user(user_id: UUID):
+            user = DomainLayer.create_user_id_info({"user_id": str(user_id)})
             status = self.service.get_user_info(user)
             return status
         
