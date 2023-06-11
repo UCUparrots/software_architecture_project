@@ -11,7 +11,7 @@ from domain_objects import SignUp, LogIn, UserInfoUpdate
 from domain import DomainLayer
 from service import ServiceLayer
 
-MEDCARD_URL_PLACEHOLDER = "http://localhost:8081/"
+MEDCARD_URL_PLACEHOLDER = "medcard-service:8080"
 
 
 class ControlerLayer():
