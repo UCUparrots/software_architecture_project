@@ -188,9 +188,9 @@ function Appointment({
 						<div className='text-[22px] text-primary pr-[5px]'>
 							<RiFolderUserLine />
 						</div>
-						<Link href='/UserInfoPage'>
-							<div className='text-primary text-sm'>CHECK PATIENT</div>
-						</Link>
+						{/* <Link href='/UserInfoPage'> */}
+						<div className='text-primary text-sm'>CHECK PATIENT</div>
+						{/* </Link> */}
 					</div>
 				</div>
 				<div className='flex flex-col justify-between'>

@@ -14,8 +14,8 @@ function UserList() {
 					<Link
 						key={item.id}
 						href={{
-							pathname: '/UserInfoPage',
-							query: { id: item.id }, // the data
+							pathname: '/InfoPage',
+							// query: { id: '7e31086a-47e3-4a0e-be8e-0f39756d6e97' }, // the data
 						}}
 					>
 						<li

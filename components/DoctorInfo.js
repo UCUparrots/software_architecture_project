@@ -30,13 +30,7 @@ function DoctorInfo({ name, descr, specialization, phone, date, email, rate }) {
 	const handleChangeData = async (event) => {
 		event.preventDefault();
 		const url = '/loginS/update_info';
-		if (
-			emailVal.length == 0 ||
-			dateVal.length == 0 ||
-			phoneVal.length == 0 ||
-			specializationVal.length == 0 ||
-			descrVal.length == 0
-		) {
+		if (emailVal.length == 0 || dateVal.length == 0 || phoneVal.length == 0) {
 			handleShowWarning();
 		} else {
 			const data = {

@@ -1,6 +1,5 @@
 import { Inter } from 'next/font/google';
 import React, { useState } from 'react';
-import DoctorInfoPage from './DoctorInfoPage';
 import LoginPage from './LoginPage';
 
 const inter = Inter({ subsets: ['latin'] });

@@ -41,7 +41,7 @@ function Sidebar() {
 
 			<ul className='mt-[20px]'>
 				<li className='group relative h-[50px] w-full my-0 list-none leading-[50px]'>
-					<Link className='sidebar-link' href='/DoctorInfoPage'>
+					<Link className='sidebar-link' href='/InfoPage'>
 						<BiUser className='icon' />
 						<span
 							className={`transition-all duration-500 ease-in-out
