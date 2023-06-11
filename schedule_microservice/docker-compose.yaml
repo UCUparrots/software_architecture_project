@@ -2,18 +2,41 @@ version: '3'
 
 services:
 
-  cassandra-node:
-    # build: ./database
+  cassandra-1:
     image: cassandra:latest
-    container_name: cassandra-node
+    container_name: cassandra-1
     networks:
       - project-network
     ports:
       - "9042:9042"
-    # volumes:
-    #   - ./scripts:/opt/app/scripts
-    #   # - ./data:/opt/app/data
-    #   - ./scripts/startup.sh:/docker-entrypoint-initdb.d/startup.sh
+    environment:
+      - "MAX_HEAP_SIZE=256M"
+      - "HEAP_NEWSIZE=128M"
+      - "CASSANDRA_SEEDS=cassandra-1,cassandra-2"
+
+  cassandra-2:
+    image: cassandra:latest
+    container_name: cassandra-2
+    networks:
+      - project-network
+    environment:
+      - "MAX_HEAP_SIZE=256M"
+      - "HEAP_NEWSIZE=128M"
+      - "CASSANDRA_SEEDS=cassandra-1,cassandra-2"
+    depends_on:
+      - "cassandra-1"
+ 
+  cassandra-3:
+    image: cassandra:latest
+    container_name: cassandra-3
+    networks:
+      - project-network
+    environment:
+      - "MAX_HEAP_SIZE=256M"
+      - "HEAP_NEWSIZE=128M"
+      - "CASSANDRA_SEEDS=cassandra-1,cassandra-2"
+    depends_on:
+      - "cassandra-2"
 
   cassandra_temp:
     image: cassandra:latest

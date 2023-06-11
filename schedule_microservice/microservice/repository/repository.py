@@ -25,7 +25,9 @@ class RepositoryLayer:
         retry_count = 0
         while retry_count < max_retries and not self.session:
             try:
-                cluster = Cluster([self.host], port=self.port)
+                if not isinstance(self.host, list):
+                    self.host = [self.host]
+                cluster = Cluster(self.host, port=self.port)
                 if keyspace is None:
                     self.session = cluster.connect()
                 else:

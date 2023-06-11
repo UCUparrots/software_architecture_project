@@ -10,7 +10,7 @@ from repository import RepositoryLayer
 
 class ServiceLayer:
     def __init__(self):
-        self.repository = RepositoryLayer(host='cassandra-node', port=9042)
+        self.repository = RepositoryLayer(host=['cassandra-1', 'cassandra-2', 'cassandra-3'], port=9042)
 
     def get_timeslots(self, optmessage: OptMessage):
         timeslots = self.repository.get_timeslots(optmessage)
